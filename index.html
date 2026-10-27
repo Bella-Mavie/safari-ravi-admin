@@ -276,6 +276,14 @@ button:disabled{opacity:.6}
   🔄 Atualizar números
 </button>
 
+<div class="panel" id="receptionPanel">
+  <h2>📄 Lista oficial de recepção</h2>
+  <p class="muted">Gere um PDF A4 com os convidados autorizados em ordem alfabética, família, categoria e espaço para marcar a chegada. Dados privados e recusados não aparecem.</p>
+  <button id="generateReceptionPdf" type="button">📄 Gerar lista do evento em PDF</button>
+  <div id="receptionMsg" class="status" role="status" aria-live="polite"></div>
+  <p class="warning">🔐 Documento reservado à organização. Confira os cadastros de teste antes de imprimir a versão definitiva.</p>
+</div>
+
 <div class="panel" id="confirmationPanel">
   <h2>📋 Gerenciar confirmações</h2>
   <p class="muted">Confira cada pessoa e decida individualmente. Somente os autorizados entram na lista oficial da festa.</p>
@@ -497,6 +505,7 @@ button:disabled{opacity:.6}
 
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
 <script type="module">
 import {createClient} from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
@@ -532,6 +541,7 @@ function resetPrivate(){
     'total','solicitacoes','alertas'
   ].forEach(id=>$(id).textContent='—');
 
+  $('receptionMsg').textContent='';
   $('familyList').replaceChildren();
   $('peopleList').replaceChildren();
 
@@ -1221,6 +1231,77 @@ $('refreshPeople').addEventListener(
   'click',
   loadPeople
 );
+
+// PDF DA RECEPÇÃO - CONSULTA DIRETA AOS AUTORIZADOS
+$('generateReceptionPdf').addEventListener('click',async()=>{
+  if(!admin)return;
+  const button=$('generateReceptionPdf');
+  const notice=$('receptionMsg');
+  button.disabled=true;
+  notice.textContent='Consultando convidados autorizados...';
+  try{
+    const {data,error}=await supabase.rpc('admin_lista_recepcao_ravi');
+    if(error)throw error;
+    const guests=Array.isArray(data)?data:[];
+    if(!guests.length){
+      notice.textContent='Ainda não há convidados autorizados para gerar a lista.';
+      return;
+    }
+    if(!window.jspdf||!window.jspdf.jsPDF){
+      throw Error('Biblioteca PDF indisponível. Verifique a conexão e recarregue a página.');
+    }
+    const collator=new Intl.Collator('pt-BR',{sensitivity:'base',numeric:true});
+    guests.sort((a,b)=>collator.compare(a.nome_convidado||'',b.nome_convidado||'')||collator.compare(a.nome_familia||'',b.nome_familia||''));
+    const labels={adulto:'Adulto',adolescente:'Adolescente',crianca:'Criança',bebe:'Bebê',indefinida:'Não definida'};
+    const counts={adulto:0,adolescente:0,crianca:0,bebe:0,indefinida:0};
+    for(const g of guests){counts[g.categoria] = (counts[g.categoria]||0)+1;}
+    const {jsPDF}=window.jspdf;
+    const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+    const pageWidth=210, left=13, right=197;
+    let y=15, page=1;
+    const line=(yPos)=>{doc.setDrawColor(180,180,180);doc.line(left,yPos,right,yPos);};
+    const header=()=>{
+      doc.setFont('helvetica','bold');doc.setFontSize(16);
+      doc.text('SAFÁRI DO RAVI NOAH',105,17,{align:'center'});
+      doc.setFontSize(10);doc.text('LISTA OFICIAL DE RECEPÇÃO - 18/04/2027',105,24,{align:'center'});
+      doc.setFont('helvetica','normal');doc.setFontSize(8.5);
+      doc.text('Espaço Recanto do Vale  |  A partir das 12h',105,30,{align:'center'});
+      doc.text(`Total: ${guests.length}  |  Adultos: ${counts.adulto}  |  Adolescentes: ${counts.adolescente}  |  Crianças: ${counts.crianca}  |  Bebês: ${counts.bebe}` ,105,37,{align:'center'});
+      line(41);doc.setFont('helvetica','bold');doc.setFontSize(9);
+      doc.text('CHEGOU',left+1,47);doc.text('CONVIDADO / FAMÍLIA',left+20,47);doc.text('CATEGORIA',right-1,47,{align:'right'});
+      line(49);y=53;
+    };
+    const footer=()=>{
+      doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(90);
+      doc.text(`Uso exclusivo da recepção  •  Página ${page}`,105,290,{align:'center'});
+      doc.setTextColor(0);
+    };
+    header();
+    for(const g of guests){
+      const name=String(g.nome_convidado||'Sem nome');
+      const family=String(g.nome_familia||'Sem família');
+      const nameLines=doc.splitTextToSize(name,113);
+      const familyLines=doc.splitTextToSize('Família: '+family,113);
+      const h=Math.max(14,6*nameLines.length+4.4*familyLines.length+4);
+      if(y+h>280){footer();doc.addPage();page++;header();}
+      doc.setDrawColor(100);doc.rect(left+3,y+2,4.5,4.5);
+      doc.setFont('helvetica','bold');doc.setFontSize(10);
+      doc.text(nameLines,left+20,y+5);
+      doc.setFont('helvetica','normal');doc.setFontSize(8);
+      doc.setTextColor(85);
+      doc.text(familyLines,left+20,y+5+6*nameLines.length);
+      doc.setTextColor(0);doc.setFontSize(9);
+      doc.text(labels[g.categoria]||'Não definida',right-1,y+5,{align:'right'});
+      line(y+h-1);y+=h;
+    }
+    footer();
+    doc.save('lista_recepcao_safari_ravi_18-04-2027.pdf');
+    notice.textContent=`PDF gerado com ${guests.length} convidado(s) autorizado(s). Confira os downloads do celular.`;
+  }catch(e){
+    console.error(e);
+    notice.textContent='Não foi possível gerar o PDF: '+(e.message||'erro desconhecido');
+  }finally{button.disabled=false;}
+});
 
 // SAIR DA CONTA
 
