@@ -573,7 +573,7 @@ function renderRequests(){
 
 async function deleteRequest(request,button){
   if(!admin)return;
-  const id=Number(request.id);
+  const id=Number(request.solicitacao_id);
   if(!Number.isSafeInteger(id)||id<=0){
     window.alert('Não foi possível identificar a solicitação. Nenhum registro foi apagado.');
     return;
