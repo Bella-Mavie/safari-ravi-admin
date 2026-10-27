@@ -1,11 +1,12 @@
 
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="google" content="notranslate">
-<meta name="theme-color" content="#102d21">
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
+<meta content="notranslate" name="google"/>
+<meta content="#102d21" name="theme-color"/>
 <title>Central do Safári | Ravi Noah</title>
 <style>
 :root{
@@ -190,324 +191,228 @@ button:disabled{opacity:.6}
   margin-top:22px;
   line-height:1.5;
 }
+
+.safari-tab{margin:13px 0;border:1px solid #d6bc8777;border-radius:17px;background:#102d23;overflow:hidden;text-align:left}
+.safari-tab>summary{display:flex;flex-direction:column;gap:5px;cursor:pointer;padding:18px 42px 18px 17px;position:relative;list-style:none;user-select:none}
+.safari-tab>summary::-webkit-details-marker{display:none}
+.safari-tab>summary:after{content:'+';position:absolute;right:17px;top:18px;color:#e9c37d;font:26px Arial}
+.safari-tab[open]>summary:after{content:'−'}
+.safari-tab[open]>summary{background:#234c36;border-bottom:1px solid #d6bc8755}
+.tab-title{font:bold 17px Georgia,serif;color:#e9c37d}
+.tab-desc{font:12px/1.5 Arial,sans-serif;color:#e6d7b7}
+.tab-body{padding:5px 12px 17px}
+.tab-body .panel{margin-top:13px}
+#familySearch{margin-top:14px}
+.items li[hidden]{display:none}
+.safari-tab:focus-within{border-color:#e9c37d}
 </style>
 </head>
 <body>
 <main>
-
 <div style="font-size:38px">🦁🌿👑</div>
 <div class="subtitle">ACESSO EXCLUSIVO</div>
 <h1>Central do Safári</h1>
 <p>
-  Administração de convidados do<br>
-  <strong>Príncipe Ravi Noah</strong>
+  Administração de convidados do<br/>
+<strong>Príncipe Ravi Noah</strong>
 </p>
-
 <section id="login">
-  <form id="loginForm">
-    <label for="email">E-mail administrativo</label>
-    <input
-      id="email"
-      name="email"
-      type="email"
-      required
-      autocomplete="username"
-    >
-
-    <label for="password">Senha</label>
-    <input
-      id="password"
-      name="password"
-      type="password"
-      required
-      autocomplete="current-password"
-    >
-
-    <button id="enter" type="submit">
+<form id="loginForm">
+<label for="email">E-mail administrativo</label>
+<input autocomplete="username" id="email" name="email" required="" type="email"/>
+<label for="password">Senha</label>
+<input autocomplete="current-password" id="password" name="password" required="" type="password"/>
+<button id="enter" type="submit">
       Entrar no painel 🔐
     </button>
-  </form>
+</form>
 </section>
-
 <section id="private">
-
 <h2>👑 Painel Administrativo</h2>
 <p>Bem-vinda à Central de Convidados!</p>
 
-<div class="grid">
-  <div class="stat">
+
+
+
+
+
+
+
+
+<details class="safari-tab"><summary><span class="tab-title">📊 Visão geral</span><span class="tab-desc">Contadores e resumo da festa</span></summary><div class="tab-body"><div class="grid">
+<div class="stat">
     👨‍👩‍👧
     <span class="number" id="adultos">—</span>
-    <span class="name">Adultos</span>
-  </div>
-  <div class="stat">
+<span class="name">Adultos</span>
+</div>
+<div class="stat">
     🌿
     <span class="number" id="adolescentes">—</span>
-    <span class="name">Adolescentes</span>
-  </div>
-  <div class="stat">
+<span class="name">Adolescentes</span>
+</div>
+<div class="stat">
     🦁
     <span class="number" id="criancas">—</span>
-    <span class="name">Crianças</span>
-  </div>
-  <div class="stat">
+<span class="name">Crianças</span>
+</div>
+<div class="stat">
     🍼
     <span class="number" id="bebes">—</span>
-    <span class="name">Bebês</span>
-  </div>
+<span class="name">Bebês</span>
 </div>
-
-<div class="panel">
-  <div class="summary-row">
-    <span>✅ Total autorizado</span>
-    <strong id="total">—</strong>
-  </div>
-  <div class="summary-row">
-    <span>📋 Solicitações pendentes</span>
-    <strong id="solicitacoes">—</strong>
-  </div>
-  <div class="summary-row">
-    <span>🚨 Alertas privados</span>
-    <strong id="alertas">—</strong>
-  </div>
+</div><div class="panel">
+<div class="summary-row">
+<span>✅ Total autorizado</span>
+<strong id="total">—</strong>
 </div>
-
-<button id="refresh" type="button" class="secondary">
+<div class="summary-row">
+<span>📋 Solicitações pendentes</span>
+<strong id="solicitacoes">—</strong>
+</div>
+<div class="summary-row">
+<span>🚨 Alertas privados</span>
+<strong id="alertas">—</strong>
+</div>
+</div><button class="secondary" id="refresh" type="button">
   🔄 Atualizar números
-</button>
-
-<div class="panel" id="receptionPanel">
-  <h2>📄 Lista oficial de recepção</h2>
-  <p class="muted">Gere um PDF A4 com os convidados autorizados em ordem alfabética, família, categoria e espaço para marcar a chegada. Dados privados e recusados não aparecem.</p>
-  <button id="generateReceptionPdf" type="button">📄 Gerar lista do evento em PDF</button>
-  <div id="receptionMsg" class="status" role="status" aria-live="polite"></div>
-  <p class="warning">🔐 Documento reservado à organização. Confira os cadastros de teste antes de imprimir a versão definitiva.</p>
-</div>
-
-<div class="panel" id="confirmationPanel">
-  <h2>📋 Gerenciar confirmações</h2>
-  <p class="muted">Confira cada pessoa e decida individualmente. Somente os autorizados entram na lista oficial da festa.</p>
-  <button id="refreshRequests" type="button" class="secondary">🔄 Atualizar confirmações</button>
-  <label class="request-filter"><input type="checkbox" id="showCompleted"> Mostrar também solicitações concluídas</label>
-  <div id="requestMsg" class="status" role="status" aria-live="polite"></div>
-  <div id="requestList"></div>
-</div>
-
-<div class="panel">
-  <h2>🌿 Cadastro de famílias</h2>
-  <p class="muted">
+</button></div></details><details class="safari-tab"><summary><span class="tab-title">🌿 Famílias cadastradas</span><span class="tab-desc">Cadastro, pesquisa e integrantes</span></summary><div class="tab-body"><div class="panel">
+<h2>🌿 Cadastro de famílias</h2>
+<p class="muted">
     Organize seus grupos. O cadastro não autoriza
     entrada na festa.
   </p>
-
-  <form id="familyForm">
-    <label for="familyName">
+<form id="familyForm">
+<label for="familyName">
       Nome da família ou grupo
     </label>
-    <input
-      id="familyName"
-      maxlength="120"
-      required
-      placeholder="Ex.: Família da Priscila"
-    >
-
-    <label for="familyNotes">
+<input id="familyName" maxlength="120" placeholder="Ex.: Família da Priscila" required=""/>
+<label for="familyNotes">
       Observações privadas
     </label>
-    <textarea
-      id="familyNotes"
-      maxlength="1000"
-      placeholder="Opcional"
-    ></textarea>
-
-    <button id="saveFamily" type="submit">
+<textarea id="familyNotes" maxlength="1000" placeholder="Opcional"></textarea>
+<button id="saveFamily" type="submit">
       ➕ Cadastrar família
     </button>
-  </form>
-
-  <div class="status" id="familyMsg" role="status"></div>
-</div>
-
-<div class="panel">
-  <h2>📋 Famílias cadastradas</h2>
-
-  <button
-    id="refreshFamilies"
-    type="button"
-    class="secondary"
-  >
+</form>
+<div class="status" id="familyMsg" role="status"></div>
+</div><div class="panel">
+<h2>📋 Famílias cadastradas</h2>
+<button class="secondary" id="refreshFamilies" type="button">
     🔄 Atualizar famílias
   </button>
-
-  <ul id="familyList" class="items"></ul>
-  <p id="emptyFamilies" class="muted"></p>
-</div>
-
-<div class="panel">
-  <h2>🦁 Integrantes da família</h2>
-
-  <p class="muted">
+<input aria-label="Pesquisar famílias" autocomplete="off" id="familySearch" placeholder="🔎 Pesquisar família pelo nome" type="search"/><p class="muted" id="familyCount"></p><ul class="items" id="familyList"></ul>
+<p class="muted" id="emptyFamilies"></p>
+</div><div class="panel">
+<h2>🦁 Integrantes da família</h2>
+<p class="muted">
     Cadastre pessoas previstas. Isso não confirma
     presença nem concede autorização de entrada.
   </p>
-
-  <label for="selectedFamily">
+<label for="selectedFamily">
     Selecione a família
   </label>
-
-  <select id="selectedFamily">
-    <option value="">Escolha uma família</option>
-  </select>
-
-  <form id="personForm">
-
-    <label for="personName">
+<select id="selectedFamily">
+<option value="">Escolha uma família</option>
+</select>
+<form id="personForm">
+<label for="personName">
       Nome e sobrenome
     </label>
-    <input
-      id="personName"
-      maxlength="160"
-      required
-      placeholder="Nome completo"
-    >
-
-    <label for="personCategory">
+<input id="personName" maxlength="160" placeholder="Nome completo" required=""/>
+<label for="personCategory">
       Categoria
     </label>
-
-    <select id="personCategory" required>
-      <option value="">Selecione a categoria</option>
-      <option value="adulto">Adulto</option>
-      <option value="adolescente">Adolescente</option>
-      <option value="crianca">Criança</option>
-      <option value="bebe">Bebê</option>
-    </select>
-
-    <label for="personNotes">
+<select id="personCategory" required="">
+<option value="">Selecione a categoria</option>
+<option value="adulto">Adulto</option>
+<option value="adolescente">Adolescente</option>
+<option value="crianca">Criança</option>
+<option value="bebe">Bebê</option>
+</select>
+<label for="personNotes">
       Observações privadas
     </label>
-
-    <textarea
-      id="personNotes"
-      maxlength="1000"
-      placeholder="Opcional"
-    ></textarea>
-
-    <button id="savePerson" type="submit">
+<textarea id="personNotes" maxlength="1000" placeholder="Opcional"></textarea>
+<button id="savePerson" type="submit">
       ➕ Adicionar integrante
     </button>
-  </form>
-
-  <div
-    class="status"
-    id="personMsg"
-    role="status"
-  ></div>
-
-  <h2>📜 Pessoas cadastradas</h2>
-
-  <button
-    id="refreshPeople"
-    type="button"
-    class="secondary"
-  >
+</form>
+<div class="status" id="personMsg" role="status"></div>
+<h2>📜 Pessoas cadastradas</h2>
+<button class="secondary" id="refreshPeople" type="button">
     🔄 Atualizar integrantes
   </button>
-
-  <ul id="peopleList" class="items"></ul>
-
-  <p id="emptyPeople" class="muted">
+<ul class="items" id="peopleList"></ul>
+<p class="muted" id="emptyPeople">
     Selecione uma família para visualizar.
   </p>
-</div>
-
-<div class="panel">
-  <div style="font-size:32px">🔗🦁✉️</div>
-
-  <h2>Convites exclusivos</h2>
-
-  <p class="muted">
+</div></div></details><details class="safari-tab"><summary><span class="tab-title">💌 Convites exclusivos</span><span class="tab-desc">Gerar e copiar convites por família</span></summary><div class="tab-body"><div class="panel">
+<div style="font-size:32px">🔗🦁✉️</div>
+<h2>Convites exclusivos</h2>
+<p class="muted">
     Gere um código individual para cada família
     que você decidir convidar.
   </p>
-
-  <p class="warning">
+<p class="warning">
     🔐 Somente a administradora pode gerar
     convites. Um grupo cadastrado não recebe
     convite automaticamente.
   </p>
-
-  <label for="inviteFamily">
+<label for="inviteFamily">
     Família que receberá o convite
   </label>
-
-  <select id="inviteFamily">
-    <option value="">Escolha uma família</option>
-  </select>
-
-  <button id="generateInvite" type="button">
+<select id="inviteFamily">
+<option value="">Escolha uma família</option>
+</select>
+<button id="generateInvite" type="button">
     🔗 Gerar convite exclusivo
   </button>
-
-  <div
-    id="inviteMsg"
-    class="status"
-    role="status"
-    aria-live="polite"
-  ></div>
-
-  <div id="inviteResult" class="code-box">
-    <strong>👑 Link exclusivo da família</strong>
-
-    <p class="muted">
+<div aria-live="polite" class="status" id="inviteMsg" role="status"></div>
+<div class="code-box" id="inviteResult">
+<strong>👑 Link exclusivo da família</strong>
+<p class="muted">
       Copie o link abaixo e envie somente à família correspondente. O código já está incluído automaticamente.
     </p>
-
-    <code id="inviteCode" hidden></code>
-    <code id="inviteLink"></code>
-
-    <button id="copyInvite" type="button">
+<code hidden="" id="inviteCode"></code>
+<code id="inviteLink"></code>
+<button id="copyInvite" type="button">
       🔗 Copiar link da família
     </button>
-
-    <p class="warning">
+<p class="warning">
       🔐 Este link é exclusivo e permite acessar a confirmação desta família. Não compartilhe com outras pessoas.
     </p>
-  </div>
-  <div class="code-box" style="display:block">
-    <strong>🔗 Já tem um código gerado?</strong>
-    <p class="muted">Cole aqui o código que você guardou para criar o link sem gerar outro convite.</p>
-    <label for="existingInviteCode">Código exclusivo já existente</label>
-    <input id="existingInviteCode" type="text" autocomplete="off" placeholder="Cole o código da família">
-    <button id="copyExistingLink" type="button">📋 Copiar link com este código</button>
-    <p id="existingLinkMsg" class="status" role="status"></p>
-  </div>
 </div>
-
-<button
-  id="logout"
-  type="button"
-  class="secondary"
->
+<div class="code-box" style="display:block">
+<strong>🔗 Já tem um código gerado?</strong>
+<p class="muted">Cole aqui o código que você guardou para criar o link sem gerar outro convite.</p>
+<label for="existingInviteCode">Código exclusivo já existente</label>
+<input autocomplete="off" id="existingInviteCode" placeholder="Cole o código da família" type="text"/>
+<button id="copyExistingLink" type="button">📋 Copiar link com este código</button>
+<p class="status" id="existingLinkMsg" role="status"></p>
+</div>
+</div></div></details><details class="safari-tab"><summary><span class="tab-title">✅ Confirmações e alertas</span><span class="tab-desc">Solicitações e decisões privadas</span></summary><div class="tab-body"><div class="panel" id="confirmationPanel">
+<h2>📋 Gerenciar confirmações</h2>
+<p class="muted">Confira cada pessoa e decida individualmente. Somente os autorizados entram na lista oficial da festa.</p>
+<button class="secondary" id="refreshRequests" type="button">🔄 Atualizar confirmações</button>
+<label class="request-filter"><input id="showCompleted" type="checkbox"/> Mostrar também solicitações concluídas</label>
+<div aria-live="polite" class="status" id="requestMsg" role="status"></div>
+<div id="requestList"></div>
+</div></div></details><details class="safari-tab"><summary><span class="tab-title">📄 Relatórios e recepção</span><span class="tab-desc">Lista oficial imprimível</span></summary><div class="tab-body"><div class="panel" id="receptionPanel">
+<h2>📄 Lista oficial de recepção</h2>
+<p class="muted">Gere um PDF A4 com os convidados autorizados em ordem alfabética, família, categoria e espaço para marcar a chegada. Dados privados e recusados não aparecem.</p>
+<button id="generateReceptionPdf" type="button">📄 Gerar lista do evento em PDF</button>
+<div aria-live="polite" class="status" id="receptionMsg" role="status"></div>
+<p class="warning">🔐 Documento reservado à organização. Confira os cadastros de teste antes de imprimir a versão definitiva.</p>
+</div></div></details><button class="secondary" id="logout" type="button">
   Sair da conta
 </button>
-
 </section>
-
-<div
-  id="msg"
-  class="status"
-  role="status"
-  aria-live="polite"
-></div>
-
+<div aria-live="polite" class="status" id="msg" role="status"></div>
 <small>
-  Área administrativa privada • Safári do Ravi Noah<br>
+  Área administrativa privada • Safári do Ravi Noah<br/>
   18 de abril de 2027
 </small>
-
 </main>
-
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
 <script type="module">
 import {createClient} from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
@@ -531,6 +436,7 @@ function showAdmin(ok){
   admin=ok;
   $('login').style.display=ok?'none':'block';
   $('private').style.display=ok?'block':'none';
+  if(ok)document.querySelectorAll('.safari-tab').forEach(tab=>tab.open=false);
 }
 
 function clearInvite(){
@@ -549,6 +455,8 @@ function resetPrivate(){
 
   $('receptionMsg').textContent='';
   $('familyList').replaceChildren();
+  $('familySearch').value='';
+  $('familyCount').textContent='';
   $('peopleList').replaceChildren();
 
   $('selectedFamily').replaceChildren(
@@ -710,6 +618,7 @@ async function loadFamilies(){
     if(error)throw error;
 
     const families=Array.isArray(data)?data:[];
+    $('familyCount').textContent=families.length+' família(s) cadastrada(s).';
 
     const previous=$('selectedFamily').value;
     const previousInvite=$('inviteFamily').value;
@@ -758,6 +667,7 @@ async function loadFamilies(){
 
     $('emptyFamilies').textContent=
       families.length?'':'Nenhuma família cadastrada ainda.';
+    filterFamilies();
 
     if(
       [...$('selectedFamily').options]
@@ -789,6 +699,24 @@ async function loadFamilies(){
     $('refreshFamilies').disabled=false;
   }
 }
+
+function filterFamilies(){
+  const term=$('familySearch').value.trim().toLocaleLowerCase('pt-BR');
+  let visible=0;
+  for(const li of $('familyList').children){
+    const name=li.querySelector('strong')?.textContent||'';
+    const matches=name.toLocaleLowerCase('pt-BR').includes(term);
+    li.hidden=!matches;
+    if(matches)visible++;
+  }
+  $('familyCount').textContent=visible+' família(s) exibida(s).';
+  if(term && !visible)$('emptyFamilies').textContent='Nenhuma família encontrada nesta pesquisa.';
+  else if($('familyList').children.length)$('emptyFamilies').textContent='';
+}
+$('familySearch').addEventListener('input',filterFamilies);
+document.querySelectorAll('.safari-tab').forEach(tab=>tab.addEventListener('toggle',()=>{
+  if(tab.open)document.querySelectorAll('.safari-tab').forEach(other=>{if(other!==tab)other.open=false;});
+}));
 
 async function deleteFamily(f,button){
   if(!admin)return;
@@ -1357,6 +1285,5 @@ check().catch(e=>{
   msg('Não foi possível iniciar o painel.');
 });
 </script>
-  
 </body>
 </html>
