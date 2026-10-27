@@ -1,0 +1,1185 @@
+
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="google" content="notranslate">
+<meta name="theme-color" content="#102d21">
+<title>Central do Safári | Ravi Noah</title>
+<style>
+:root{
+  color-scheme:dark;
+  --gold:#e9c37d;
+  --cream:#f8ebcf;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  min-height:100svh;
+  padding:16px 12px;
+  background:radial-gradient(circle at top,#315d42,#102d21 70%);
+  color:var(--cream);
+  font-family:Georgia,serif;
+}
+main{
+  max-width:760px;
+  margin:auto;
+  padding:25px 18px;
+  border:1px solid #bfa26a;
+  border-radius:24px;
+  background:linear-gradient(150deg,#214b35,#112e23);
+  text-align:center;
+  box-shadow:0 16px 50px #0006;
+}
+h1,h2{color:var(--gold)}
+h1{font-size:30px}
+h2{font-size:22px}
+p{line-height:1.6}
+.subtitle{
+  font-size:12px;
+  letter-spacing:2px;
+  color:var(--gold);
+}
+form{
+  text-align:left;
+  margin:20px auto;
+  max-width:550px;
+}
+label{
+  display:block;
+  margin:14px 0 7px;
+  font:14px Arial,sans-serif;
+}
+input,textarea,select{
+  width:100%;
+  padding:13px;
+  border-radius:10px;
+  border:1px solid #d6bc87;
+  background:#fff;
+  color:#1d2c22;
+  font:16px Arial,sans-serif;
+}
+textarea{min-height:75px}
+button{
+  width:100%;
+  padding:14px;
+  margin-top:15px;
+  border:0;
+  border-radius:12px;
+  background:linear-gradient(135deg,#ffe3a7,#c79a51);
+  color:#243525;
+  font:bold 15px Arial,sans-serif;
+  cursor:pointer;
+}
+button:disabled{opacity:.6}
+.secondary{
+  background:transparent;
+  color:var(--gold);
+  border:1px solid var(--gold);
+}
+#private{display:none}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+  margin-top:20px;
+}
+.stat,.panel{
+  border:1px solid #d6bc8760;
+  border-radius:17px;
+  background:#ffffff08;
+}
+.stat{padding:18px 8px}
+.number{
+  display:block;
+  color:var(--gold);
+  font:bold 32px Arial,sans-serif;
+  margin:8px 0;
+}
+.name,.muted{font:13px/1.6 Arial,sans-serif}
+.muted{color:#ddcfb2}
+.panel{
+  padding:18px 15px;
+  margin-top:23px;
+}
+.summary-row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  padding:12px 0;
+  border-bottom:1px solid #ffffff20;
+  text-align:left;
+  font:14px Arial,sans-serif;
+}
+.summary-row:last-child{border:0}
+.summary-row strong{color:var(--gold)}
+.items{
+  list-style:none;
+  padding:0;
+  margin:12px 0;
+  text-align:left;
+}
+.items li{
+  padding:13px 5px;
+  border-bottom:1px solid #ffffff30;
+  overflow-wrap:anywhere;
+}
+.items strong{color:var(--gold)}
+.items p{
+  font:13px/1.5 Arial,sans-serif;
+  white-space:pre-wrap;
+  margin:6px 0;
+}
+.status{
+  font:14px/1.5 Arial,sans-serif;
+  min-height:20px;
+  margin:12px 0;
+}
+.code-box{
+  display:none;
+  margin-top:16px;
+  padding:15px;
+  border:1px solid var(--gold);
+  border-radius:13px;
+  background:#091c15;
+  text-align:left;
+}
+.code-box strong{
+  display:block;
+  margin-bottom:10px;
+  color:var(--gold);
+}
+.code-box code{
+  display:block;
+  overflow-wrap:anywhere;
+  user-select:all;
+  font:13px/1.7 monospace;
+  color:#fff2d0;
+}
+.warning{
+  padding:12px;
+  border:1px solid #d6bc8755;
+  border-radius:12px;
+  font:13px/1.6 Arial,sans-serif;
+  color:#e9d9b5;
+}
+ .request-card{margin:14px 0;padding:16px;border:1px solid #d6bc8770;border-radius:15px;background:#0b261c;text-align:left}
+ .request-card h3{color:var(--gold);margin:0 0 8px;font-size:19px}
+ .guest-card{padding:13px 0;border-top:1px solid #ffffff35;font:14px/1.6 Arial,sans-serif}
+ .guest-card strong{color:#ffe1a0}
+ .guest-card p{margin:5px 0;overflow-wrap:anywhere}
+ .guest-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+ .guest-actions button{margin-top:8px;padding:12px 5px}
+ .guest-actions .deny{background:#f1d0c5;color:#5d2424}
+ .guest-actions .approved{background:#bce6c6;color:#16412c}
+ .private-alert{margin:8px 0;padding:9px;border-left:3px solid #e8b866;background:#583c1d;color:#fff1d1;overflow-wrap:anywhere}
+ .request-filter{display:flex;align-items:center;gap:8px;text-align:left;font:14px Arial,sans-serif;margin:15px 0}
+ .request-filter input{width:auto}
+ small{
+  display:block;
+  color:#d8c8a4;
+  margin-top:22px;
+  line-height:1.5;
+}
+</style>
+</head>
+<body>
+<main>
+
+<div style="font-size:38px">🦁🌿👑</div>
+<div class="subtitle">ACESSO EXCLUSIVO</div>
+<h1>Central do Safári</h1>
+<p>
+  Administração de convidados do<br>
+  <strong>Príncipe Ravi Noah</strong>
+</p>
+
+<section id="login">
+  <form id="loginForm">
+    <label for="email">E-mail administrativo</label>
+    <input
+      id="email"
+      name="email"
+      type="email"
+      required
+      autocomplete="username"
+    >
+
+    <label for="password">Senha</label>
+    <input
+      id="password"
+      name="password"
+      type="password"
+      required
+      autocomplete="current-password"
+    >
+
+    <button id="enter" type="submit">
+      Entrar no painel 🔐
+    </button>
+  </form>
+</section>
+
+<section id="private">
+
+<h2>👑 Painel Administrativo</h2>
+<p>Bem-vinda à Central de Convidados!</p>
+
+<div class="grid">
+  <div class="stat">
+    👨‍👩‍👧
+    <span class="number" id="adultos">—</span>
+    <span class="name">Adultos</span>
+  </div>
+  <div class="stat">
+    🌿
+    <span class="number" id="adolescentes">—</span>
+    <span class="name">Adolescentes</span>
+  </div>
+  <div class="stat">
+    🦁
+    <span class="number" id="criancas">—</span>
+    <span class="name">Crianças</span>
+  </div>
+  <div class="stat">
+    🍼
+    <span class="number" id="bebes">—</span>
+    <span class="name">Bebês</span>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="summary-row">
+    <span>✅ Total autorizado</span>
+    <strong id="total">—</strong>
+  </div>
+  <div class="summary-row">
+    <span>📋 Solicitações pendentes</span>
+    <strong id="solicitacoes">—</strong>
+  </div>
+  <div class="summary-row">
+    <span>🚨 Alertas privados</span>
+    <strong id="alertas">—</strong>
+  </div>
+</div>
+
+<button id="refresh" type="button" class="secondary">
+  🔄 Atualizar números
+</button>
+
+<div class="panel" id="confirmationPanel">
+  <h2>📋 Gerenciar confirmações</h2>
+  <p class="muted">Confira cada pessoa e decida individualmente. Somente os autorizados entram na lista oficial da festa.</p>
+  <button id="refreshRequests" type="button" class="secondary">🔄 Atualizar confirmações</button>
+  <label class="request-filter"><input type="checkbox" id="showCompleted"> Mostrar também solicitações concluídas</label>
+  <div id="requestMsg" class="status" role="status" aria-live="polite"></div>
+  <div id="requestList"></div>
+</div>
+
+<div class="panel">
+  <h2>🌿 Cadastro de famílias</h2>
+  <p class="muted">
+    Organize seus grupos. O cadastro não autoriza
+    entrada na festa.
+  </p>
+
+  <form id="familyForm">
+    <label for="familyName">
+      Nome da família ou grupo
+    </label>
+    <input
+      id="familyName"
+      maxlength="120"
+      required
+      placeholder="Ex.: Família da Priscila"
+    >
+
+    <label for="familyNotes">
+      Observações privadas
+    </label>
+    <textarea
+      id="familyNotes"
+      maxlength="1000"
+      placeholder="Opcional"
+    ></textarea>
+
+    <button id="saveFamily" type="submit">
+      ➕ Cadastrar família
+    </button>
+  </form>
+
+  <div class="status" id="familyMsg" role="status"></div>
+</div>
+
+<div class="panel">
+  <h2>📋 Famílias cadastradas</h2>
+
+  <button
+    id="refreshFamilies"
+    type="button"
+    class="secondary"
+  >
+    🔄 Atualizar famílias
+  </button>
+
+  <ul id="familyList" class="items"></ul>
+  <p id="emptyFamilies" class="muted"></p>
+</div>
+
+<div class="panel">
+  <h2>🦁 Integrantes da família</h2>
+
+  <p class="muted">
+    Cadastre pessoas previstas. Isso não confirma
+    presença nem concede autorização de entrada.
+  </p>
+
+  <label for="selectedFamily">
+    Selecione a família
+  </label>
+
+  <select id="selectedFamily">
+    <option value="">Escolha uma família</option>
+  </select>
+
+  <form id="personForm">
+
+    <label for="personName">
+      Nome e sobrenome
+    </label>
+    <input
+      id="personName"
+      maxlength="160"
+      required
+      placeholder="Nome completo"
+    >
+
+    <label for="personCategory">
+      Categoria
+    </label>
+
+    <select id="personCategory" required>
+      <option value="">Selecione a categoria</option>
+      <option value="adulto">Adulto</option>
+      <option value="adolescente">Adolescente</option>
+      <option value="crianca">Criança</option>
+      <option value="bebe">Bebê</option>
+    </select>
+
+    <label for="personNotes">
+      Observações privadas
+    </label>
+
+    <textarea
+      id="personNotes"
+      maxlength="1000"
+      placeholder="Opcional"
+    ></textarea>
+
+    <button id="savePerson" type="submit">
+      ➕ Adicionar integrante
+    </button>
+  </form>
+
+  <div
+    class="status"
+    id="personMsg"
+    role="status"
+  ></div>
+
+  <h2>📜 Pessoas cadastradas</h2>
+
+  <button
+    id="refreshPeople"
+    type="button"
+    class="secondary"
+  >
+    🔄 Atualizar integrantes
+  </button>
+
+  <ul id="peopleList" class="items"></ul>
+
+  <p id="emptyPeople" class="muted">
+    Selecione uma família para visualizar.
+  </p>
+</div>
+
+<div class="panel">
+  <div style="font-size:32px">🔗🦁✉️</div>
+
+  <h2>Convites exclusivos</h2>
+
+  <p class="muted">
+    Gere um código individual para cada família
+    que você decidir convidar.
+  </p>
+
+  <p class="warning">
+    🔐 Somente a administradora pode gerar
+    convites. Um grupo cadastrado não recebe
+    convite automaticamente.
+  </p>
+
+  <label for="inviteFamily">
+    Família que receberá o convite
+  </label>
+
+  <select id="inviteFamily">
+    <option value="">Escolha uma família</option>
+  </select>
+
+  <button id="generateInvite" type="button">
+    🔗 Gerar convite exclusivo
+  </button>
+
+  <div
+    id="inviteMsg"
+    class="status"
+    role="status"
+    aria-live="polite"
+  ></div>
+
+  <div id="inviteResult" class="code-box">
+    <strong>👑 Código exclusivo gerado</strong>
+
+    <p class="muted">
+      Copie e guarde este código.
+      Ele será necessário para montar
+      o link definitivo do convite.
+    </p>
+
+    <code id="inviteCode"></code>
+
+    <button id="copyInvite" type="button">
+      📋 Copiar código exclusivo
+    </button>
+
+    <p class="warning">
+      ⚠️ Este código aparece somente agora.
+      O banco de dados guarda apenas sua
+      representação criptográfica.
+      Não compartilhe o código antes de
+      concluirmos o sistema de confirmação.
+    </p>
+  </div>
+</div>
+
+<button
+  id="logout"
+  type="button"
+  class="secondary"
+>
+  Sair da conta
+</button>
+
+</section>
+
+<div
+  id="msg"
+  class="status"
+  role="status"
+  aria-live="polite"
+></div>
+
+<small>
+  Área administrativa privada • Safári do Ravi Noah<br>
+  18 de abril de 2027
+</small>
+
+</main>
+
+<script type="module">
+import {createClient} from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+const supabase=createClient(
+  'https://mynigxatpzownmjduowa.supabase.co',
+  'sb_publishable_HrVQAx9MFId56dATTeIteQ_bTM9F4Lk'
+);
+
+const $=id=>document.getElementById(id);
+const msg=t=>$('msg').textContent=t;
+
+let admin=false;
+let busy=false;
+let currentInviteCode='';
+let requestsCache=[];
+
+function showAdmin(ok){
+  admin=ok;
+  $('login').style.display=ok?'none':'block';
+  $('private').style.display=ok?'block':'none';
+}
+
+function clearInvite(){
+  currentInviteCode='';
+  $('inviteCode').textContent='';
+  $('inviteResult').style.display='none';
+  $('inviteMsg').textContent='';
+}
+
+function resetPrivate(){
+  [
+    'adultos','adolescentes','criancas','bebes',
+    'total','solicitacoes','alertas'
+  ].forEach(id=>$(id).textContent='—');
+
+  $('familyList').replaceChildren();
+  $('peopleList').replaceChildren();
+
+  $('selectedFamily').replaceChildren(
+    new Option('Escolha uma família','')
+  );
+
+  $('inviteFamily').replaceChildren(
+    new Option('Escolha uma família','')
+  );
+
+  $('emptyFamilies').textContent='';
+  $('emptyPeople').textContent=
+    'Selecione uma família para visualizar.';
+
+  $('familyMsg').textContent='';
+  $('personMsg').textContent='';
+
+  clearInvite();
+  requestsCache=[];
+  $('requestList').replaceChildren();
+  $('requestMsg').textContent='';
+}
+
+async function loadSummary(){
+  if(!admin)return;
+
+  $('refresh').disabled=true;
+
+  try{
+    const {data,error}=await supabase.rpc(
+      'admin_resumo_ravi'
+    );
+
+    if(error)throw error;
+
+    const r=Array.isArray(data)?data[0]:data;
+    if(!r)throw Error('Resumo vazio');
+
+    const values={
+      adultos:r.adultos,
+      adolescentes:r.adolescentes,
+      criancas:r.criancas,
+      bebes:r.bebes,
+      total:r.total_confirmados,
+      solicitacoes:r.solicitacoes_pendentes,
+      alertas:r.alertas_pendentes
+    };
+
+    for(const [id,value] of Object.entries(values)){
+      $(id).textContent=value??0;
+    }
+
+  }catch(e){
+    console.error(e);
+    msg('Não foi possível carregar os contadores.');
+  }finally{
+    $('refresh').disabled=false;
+  }
+}
+
+const categoryNames={adulto:'Adulto',adolescente:'Adolescente',crianca:'Criança',bebe:'Bebê',indefinida:'Não definida'};
+const decisionNames={pendente:'⏳ Aguardando decisão',autorizado:'✅ Autorizado',recusado:'❌ Recusado'};
+
+function addText(parent,tag,content,cls){
+  const node=document.createElement(tag);
+  node.textContent=content;
+  if(cls)node.className=cls;
+  parent.appendChild(node);
+  return node;
+}
+
+function renderRequests(){
+  const list=$('requestList');
+  list.replaceChildren();
+  if(!admin)return;
+  const showCompleted=$('showCompleted').checked;
+  const requests=requestsCache.filter(r=>showCompleted || (r.participantes||[]).some(p=>p.decisao==='pendente'));
+  if(!requests.length){
+    $('requestMsg').textContent=showCompleted?'Nenhuma solicitação encontrada.':'Nenhuma solicitação aguardando decisão. 💚';
+    return;
+  }
+  $('requestMsg').textContent=requests.length+' solicitação(ões) exibida(s).';
+  for(const r of requests){
+    const card=addText(list,'article','', 'request-card');
+    addText(card,'h3','🌿 '+(r.familia||'Família não identificada'));
+    addText(card,'p','Responsável: '+(r.responsavel||'Não informado'),'muted');
+    addText(card,'p','Situação: '+(r.status||'Não informada')+' • '+(r.data?new Date(r.data).toLocaleString('pt-BR'):'Data indisponível'),'muted');
+    for(const person of r.participantes||[]){
+      const guest=addText(card,'div','', 'guest-card');
+      addText(guest,'strong',person.nome||'Nome não informado');
+      addText(guest,'p','Declarado: '+(categoryNames[person.categoria_declarada]||person.categoria_declarada||'Não informado')+' • Cadastro: '+(categoryNames[person.categoria_interna]||'Não localizado'));
+      addText(guest,'p',decisionNames[person.decisao]||person.decisao||'Situação não informada');
+      for(const alert of person.alertas||[]){
+        if(alert.resolvido)continue;
+        addText(guest,'div','🚨 Alerta privado: '+(alert.tipo||'Verificar')+(alert.detalhes?' — '+alert.detalhes:''),'private-alert');
+      }
+      const actions=addText(guest,'div','', 'guest-actions');
+      const yes=addText(actions,'button','✅ Autorizar','approved');
+      yes.type='button';
+      const no=addText(actions,'button','❌ Recusar','deny');
+      no.type='button';
+      yes.disabled=person.decisao==='autorizado';
+      no.disabled=person.decisao==='recusado';
+      yes.addEventListener('click',()=>decideParticipant(person,'autorizado',yes,no));
+      no.addEventListener('click',()=>decideParticipant(person,'recusado',yes,no));
+    }
+  }
+}
+
+async function loadRequests(){
+  if(!admin)return;
+  $('refreshRequests').disabled=true;
+  $('requestMsg').textContent='Carregando confirmações...';
+  try{
+    const {data,error}=await supabase.rpc('admin_listar_solicitacoes_ravi');
+    if(error)throw error;
+    requestsCache=Array.isArray(data)?data:[];
+    renderRequests();
+  }catch(e){
+    console.error(e);
+    $('requestMsg').textContent='Não foi possível consultar as confirmações. Verifique se a função SQL foi criada corretamente.';
+  }finally{
+    $('refreshRequests').disabled=false;
+  }
+}
+
+async function decideParticipant(person,decision,yes,no){
+  if(!admin)return;
+  const verb=decision==='autorizado'?'AUTORIZAR':'RECUSAR';
+  if(!window.confirm(verb+' a participação de '+person.nome+'?'))return;
+  yes.disabled=true;
+  no.disabled=true;
+  $('requestMsg').textContent='Salvando sua decisão...';
+  try{
+    const {error}=await supabase.rpc('admin_decidir_participante_ravi',{
+      p_participante_id:person.id,
+      p_decisao:decision
+    });
+    if(error)throw error;
+    await Promise.all([loadRequests(),loadSummary()]);
+  }catch(e){
+    console.error(e);
+    $('requestMsg').textContent='Não foi possível salvar a decisão. Tente novamente.';
+    yes.disabled=person.decisao==='autorizado';
+    no.disabled=person.decisao==='recusado';
+  }
+}
+
+async function loadFamilies(){
+  if(!admin)return;
+
+  $('refreshFamilies').disabled=true;
+
+  try{
+    const {data,error}=await supabase.rpc(
+      'admin_listar_familias_ravi'
+    );
+
+    if(error)throw error;
+
+    const families=Array.isArray(data)?data:[];
+
+    const previous=$('selectedFamily').value;
+    const previousInvite=$('inviteFamily').value;
+
+    $('familyList').replaceChildren();
+
+    $('selectedFamily').replaceChildren(
+      new Option('Escolha uma família','')
+    );
+
+    $('inviteFamily').replaceChildren(
+      new Option('Escolha uma família','')
+    );
+
+    for(const f of families){
+      const li=document.createElement('li');
+      const strong=document.createElement('strong');
+
+      strong.textContent=f.nome;
+      li.appendChild(strong);
+
+      if(f.observacoes){
+        const p=document.createElement('p');
+        p.textContent=f.observacoes;
+        li.appendChild(p);
+      }
+
+      $('familyList').appendChild(li);
+
+      $('selectedFamily').add(
+        new Option(f.nome,String(f.id))
+      );
+
+      $('inviteFamily').add(
+        new Option(f.nome,String(f.id))
+      );
+    }
+
+    $('emptyFamilies').textContent=
+      families.length?'':'Nenhuma família cadastrada ainda.';
+
+    if(
+      [...$('selectedFamily').options]
+      .some(o=>o.value===previous)
+    ){
+      $('selectedFamily').value=previous;
+    }else{
+      $('selectedFamily').value='';
+      $('peopleList').replaceChildren();
+      $('emptyPeople').textContent=
+        'Selecione uma família para visualizar.';
+    }
+
+    if(
+      [...$('inviteFamily').options]
+      .some(o=>o.value===previousInvite)
+    ){
+      $('inviteFamily').value=previousInvite;
+    }else{
+      $('inviteFamily').value='';
+      clearInvite();
+    }
+
+  }catch(e){
+    console.error(e);
+    $('emptyFamilies').textContent=
+      'Erro ao consultar famílias.';
+  }finally{
+    $('refreshFamilies').disabled=false;
+  }
+}
+
+async function loadPeople(){
+  if(!admin)return;
+
+  const familyId=Number(
+    $('selectedFamily').value
+  );
+
+  $('peopleList').replaceChildren();
+
+  if(!familyId){
+    $('emptyPeople').textContent=
+      'Selecione uma família para visualizar.';
+    return;
+  }
+
+  $('refreshPeople').disabled=true;
+  $('emptyPeople').textContent=
+    'Carregando integrantes...';
+
+  try{
+    const {data,error}=await supabase.rpc(
+      'admin_listar_pessoas_ravi',
+      {p_familia_id:familyId}
+    );
+
+    if(error)throw error;
+
+    const people=Array.isArray(data)?data:[];
+
+    const labels={
+      adulto:'Adulto',
+      adolescente:'Adolescente',
+      crianca:'Criança',
+      bebe:'Bebê',
+      indefinida:'Categoria indefinida'
+    };
+
+    for(const person of people){
+      const li=document.createElement('li');
+      const name=document.createElement('strong');
+
+      name.textContent=
+        person.nome_completo||'Sem nome';
+
+      const category=document.createElement('p');
+
+      category.textContent=
+        'Categoria: '+
+        (labels[person.categoria]||'Não informada');
+
+      li.append(name,category);
+
+      if(person.observacoes_privadas){
+        const note=document.createElement('p');
+
+        note.textContent=
+          'Observação: '+
+          person.observacoes_privadas;
+
+        li.appendChild(note);
+      }
+
+      $('peopleList').appendChild(li);
+    }
+
+    $('emptyPeople').textContent=
+      people.length
+        ?''
+        :'Nenhum integrante cadastrado nesta família.';
+
+  }catch(e){
+    console.error(e);
+    $('emptyPeople').textContent=
+      'Erro ao consultar integrantes.';
+  }finally{
+    $('refreshPeople').disabled=false;
+  }
+}
+
+async function check(){
+  const {
+    data:{session},
+    error:sessionError
+  }=await supabase.auth.getSession();
+
+  if(sessionError||!session){
+    showAdmin(false);
+    return;
+  }
+
+  const {data,error}=await supabase.rpc(
+    'verificar_admin_ravi'
+  );
+
+  if(error||data!==true){
+    await supabase.auth.signOut();
+    showAdmin(false);
+    msg('Conta sem autorização administrativa.');
+    return;
+  }
+
+  showAdmin(true);
+  msg('');
+
+  await Promise.all([
+    loadSummary(),
+    loadFamilies(),
+    loadRequests()
+  ]);
+}
+
+// LOGIN
+
+$('loginForm').addEventListener(
+  'submit',
+  async e=>{
+    e.preventDefault();
+
+    if(busy)return;
+
+    busy=true;
+    $('enter').disabled=true;
+    msg('Verificando acesso...');
+
+    try{
+      const {error}=
+        await supabase.auth.signInWithPassword({
+          email:$('email').value.trim(),
+          password:$('password').value
+        });
+
+      if(error){
+        msg('Confira seu e-mail e senha.');
+        return;
+      }
+
+      await check();
+
+    }catch(e){
+      console.error(e);
+      msg('Falha de conexão.');
+    }finally{
+      busy=false;
+      $('enter').disabled=false;
+      $('password').value='';
+    }
+  }
+);
+
+// CADASTRO DE FAMÍLIA
+
+$('familyForm').addEventListener(
+  'submit',
+  async e=>{
+    e.preventDefault();
+
+    if(!admin)return;
+
+    $('saveFamily').disabled=true;
+    $('familyMsg').textContent='Salvando...';
+
+    try{
+      const {error}=await supabase.rpc(
+        'admin_cadastrar_familia_ravi',
+        {
+          p_nome:$('familyName').value.trim(),
+          p_observacoes:
+            $('familyNotes').value.trim()||null
+        }
+      );
+
+      if(error)throw error;
+
+      $('familyForm').reset();
+
+      $('familyMsg').textContent=
+        'Família cadastrada! 💚';
+
+      await loadFamilies();
+
+    }catch(e){
+      console.error(e);
+
+      $('familyMsg').textContent=
+        e.code==='23505'
+          ?'Essa família já existe.'
+          :'Não foi possível cadastrar a família.';
+
+    }finally{
+      $('saveFamily').disabled=false;
+    }
+  }
+);
+
+// CADASTRO DE INTEGRANTE
+
+$('personForm').addEventListener(
+  'submit',
+  async e=>{
+    e.preventDefault();
+
+    if(!admin)return;
+
+    const familyId=Number(
+      $('selectedFamily').value
+    );
+
+    if(!familyId){
+      $('personMsg').textContent=
+        'Selecione uma família primeiro.';
+      return;
+    }
+
+    $('savePerson').disabled=true;
+    $('personMsg').textContent=
+      'Salvando integrante...';
+
+    try{
+      const {error}=await supabase.rpc(
+        'admin_cadastrar_pessoa_ravi',
+        {
+          p_familia_id:familyId,
+          p_nome_completo:
+            $('personName').value.trim(),
+          p_categoria:
+            $('personCategory').value,
+          p_observacoes:
+            $('personNotes').value.trim()||null
+        }
+      );
+
+      if(error)throw error;
+
+      $('personForm').reset();
+
+      $('personMsg').textContent=
+        'Integrante cadastrado com sucesso! 💚';
+
+      await loadPeople();
+
+    }catch(e){
+      console.error(e);
+
+      $('personMsg').textContent=
+        'Não foi possível cadastrar. '+
+        'Confira o nome, a categoria e a família.';
+
+    }finally{
+      $('savePerson').disabled=false;
+    }
+  }
+);
+
+// GERAR CONVITE EXCLUSIVO
+
+$('generateInvite').addEventListener(
+  'click',
+  async()=>{
+    if(!admin)return;
+
+    const familyId=Number(
+      $('inviteFamily').value
+    );
+
+    if(!familyId){
+      $('inviteMsg').textContent=
+        'Selecione uma família primeiro.';
+      return;
+    }
+
+    if(currentInviteCode){
+      $('inviteMsg').textContent=
+        'Copie e guarde o código exibido antes '+
+        'de selecionar outra família.';
+      return;
+    }
+
+    const confirmed=window.confirm(
+      'Deseja criar um convite exclusivo para '+
+      'esta família? O código será mostrado '+
+      'somente uma vez.'
+    );
+
+    if(!confirmed)return;
+
+    $('generateInvite').disabled=true;
+    $('inviteMsg').textContent=
+      'Gerando convite seguro...';
+
+    try{
+      const {data,error}=await supabase.rpc(
+        'admin_criar_convite_ravi',
+        {p_familia_id:familyId}
+      );
+
+      if(error)throw error;
+
+      const result=Array.isArray(data)
+        ?data[0]
+        :data;
+
+      if(!result||!result.codigo_convite){
+        throw Error('Código não retornado.');
+      }
+
+      currentInviteCode=result.codigo_convite;
+
+      $('inviteCode').textContent=
+        currentInviteCode;
+
+      $('inviteResult').style.display='block';
+
+      $('inviteMsg').textContent=
+        'Convite exclusivo gerado! 💚 '+
+        'Copie e guarde o código agora.';
+
+    }catch(e){
+      console.error(e);
+
+      if(
+        (e.message||'').includes(
+          'já possui um convite ativo'
+        )
+      ){
+        $('inviteMsg').textContent=
+          'Esta família já possui um convite ativo. '+
+          'Não foi criado outro código.';
+      
+}else{
+  $('inviteMsg').textContent=
+    'Erro ao gerar convite: '+
+    (e.message||'Erro desconhecido')+
+    (e.code?' | Código: '+e.code:'');
+}
+}finally{
+
+      $('generateInvite').disabled=false;
+    }
+  }
+);
+
+// COPIAR CÓDIGO
+
+$('copyInvite').addEventListener(
+  'click',
+  async()=>{
+    if(!currentInviteCode)return;
+
+    try{
+      await navigator.clipboard.writeText(
+        currentInviteCode
+      );
+
+      $('inviteMsg').textContent=
+        'Código copiado com sucesso! 💚';
+
+    }catch(e){
+      console.error(e);
+
+      $('inviteMsg').textContent=
+        'Não foi possível copiar automaticamente. '+
+        'Toque e segure no código para copiá-lo.';
+    }
+  }
+);
+
+// ALTERAR FAMÍLIA SELECIONADA
+
+$('selectedFamily').addEventListener(
+  'change',
+  loadPeople
+);
+
+$('inviteFamily').addEventListener(
+  'change',
+  clearInvite
+);
+
+// ATUALIZAR DADOS
+
+$('refreshRequests').addEventListener('click',loadRequests);
+$('showCompleted').addEventListener('change',renderRequests);
+
+$('refresh').addEventListener(
+  'click',
+  loadSummary
+);
+
+$('refreshFamilies').addEventListener(
+  'click',
+  loadFamilies
+);
+
+$('refreshPeople').addEventListener(
+  'click',
+  loadPeople
+);
+
+// SAIR DA CONTA
+
+$('logout').addEventListener(
+  'click',
+  async()=>{
+    await supabase.auth.signOut();
+
+    showAdmin(false);
+    resetPrivate();
+
+    $('loginForm').reset();
+
+    msg('Você saiu da Central com segurança.');
+  }
+);
+
+// INICIAR PAINEL
+
+check().catch(e=>{
+  console.error(e);
+  showAdmin(false);
+  msg('Não foi possível iniciar o painel.');
+});
+</script>
+  
+</body>
+</html>
