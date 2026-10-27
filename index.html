@@ -395,6 +395,7 @@ button:disabled{opacity:.6}
 <p class="muted">Confira cada pessoa e decida individualmente. Somente os autorizados entram na lista oficial da festa.</p>
 <button class="secondary" id="refreshRequests" type="button">🔄 Atualizar confirmações</button>
 <label class="request-filter"><input id="showCompleted" type="checkbox"/> Mostrar também solicitações concluídas</label>
+<p class="muted">Solicitações concluídas ficam ocultas por padrão. Para excluir uma solicitação definitivamente, marque a opção acima para localizá-la e use o botão vermelho da solicitação. A exclusão exige confirmação.</p>
 <div aria-live="polite" class="status" id="requestMsg" role="status"></div>
 <div id="requestList"></div>
 </div></div></details><details class="safari-tab"><summary><span class="tab-title">📄 Relatórios e recepção</span><span class="tab-desc">Lista oficial imprimível</span></summary><div class="tab-body"><div class="panel" id="receptionPanel">
@@ -563,6 +564,49 @@ function renderRequests(){
       yes.addEventListener('click',()=>decideParticipant(person,'autorizado',yes,no));
       no.addEventListener('click',()=>decideParticipant(person,'recusado',yes,no));
     }
+    const remove=addText(card,'button','🗑️ Excluir esta solicitação definitivamente','danger-action');
+    remove.type='button';
+    remove.setAttribute('aria-label','Excluir solicitação da família '+(r.familia||'não identificada'));
+    remove.addEventListener('click',()=>deleteRequest(r,remove));
+  }
+}
+
+async function deleteRequest(request,button){
+  if(!admin)return;
+  const id=Number(request.id);
+  if(!Number.isSafeInteger(id)||id<=0){
+    window.alert('Não foi possível identificar a solicitação. Nenhum registro foi apagado.');
+    return;
+  }
+  const family=request.familia||'Família não identificada';
+  const people=(request.participantes||[]).length;
+  const ok=window.confirm(
+    'EXCLUSÃO DEFINITIVA DA SOLICITAÇÃO\n\n'+
+    'Família: '+family+'\n'+
+    'Participantes nesta solicitação: '+people+'\n\n'+
+    'Serão removidos a solicitação, seus participantes e alertas relacionados. '+
+    'O cadastro da família, os integrantes previstos e o convite permanecerão.\n\n'+
+    'Esta ação não pode ser desfeita. Deseja continuar?'
+  );
+  if(!ok)return;
+  const typed=window.prompt('Para excluir, digite EXCLUIR em letras maiúsculas:');
+  if(typed!== 'EXCLUIR'){
+    if(typed!==null)window.alert('Confirmação incorreta. Nada foi excluído.');
+    return;
+  }
+  button.disabled=true;
+  $('requestMsg').textContent='Excluindo solicitação...';
+  try{
+    const {error}=await supabase.rpc('admin_excluir_solicitacao_ravi',{
+      p_solicitacao_id:id
+    });
+    if(error)throw error;
+    await Promise.all([loadRequests(),loadSummary()]);
+    window.alert('Solicitação excluída definitivamente. O cadastro da família foi preservado. 💚');
+  }catch(e){
+    console.error('Erro ao excluir solicitação',e);
+    $('requestMsg').textContent='Não foi possível excluir a solicitação: '+(e.message||'Erro desconhecido');
+    button.disabled=false;
   }
 }
 
