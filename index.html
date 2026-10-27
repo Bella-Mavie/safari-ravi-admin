@@ -2,44 +2,45 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="google" content="notranslate">
 <meta name="theme-color" content="#102d21">
 <title>Central do Safári | Ravi Noah</title>
 <style>
-:root{color-scheme:dark;--bg:#102d21;--gold:#e9c37d;--cream:#f8ebcf}
+:root{color-scheme:dark;--gold:#e9c37d;--cream:#f8ebcf}
 *{box-sizing:border-box}
-body{margin:0;min-height:100svh;background:radial-gradient(circle at 50% 0,#315d42,var(--bg) 70%);color:var(--cream);font-family:Georgia,serif;padding:20px 12px}
-main{max-width:760px;margin:15px auto;padding:26px 18px;border:1px solid #bfa26a;border-radius:23px;background:linear-gradient(150deg,#214b35,#112e23);box-shadow:0 16px 50px #0007;text-align:center}
-h1{color:var(--gold);font-size:30px;margin:12px 0}
-h2{color:var(--gold);font-size:22px}
-h3{color:var(--gold);font-size:18px}
+body{margin:0;min-height:100svh;padding:16px 12px;background:radial-gradient(circle at top,#315d42,#102d21 70%);color:var(--cream);font-family:Georgia,serif}
+main{max-width:760px;margin:auto;padding:25px 18px;border:1px solid #bfa26a;border-radius:24px;background:linear-gradient(150deg,#214b35,#112e23);text-align:center;box-shadow:0 16px 50px #0006}
+h1,h2{color:var(--gold)}
+h1{font-size:30px}
+h2{font-size:22px}
 p{line-height:1.6}
-.subtitle{color:var(--gold);font-size:12px;letter-spacing:2px}
-form{text-align:left;margin:22px auto;max-width:530px}
+.subtitle{font-size:12px;letter-spacing:2px;color:var(--gold)}
+form{text-align:left;margin:20px auto;max-width:550px}
 label{display:block;margin:14px 0 7px;font:14px Arial,sans-serif}
-input,textarea{width:100%;padding:14px;border-radius:10px;border:1px solid #d6bc87;background:#fff;color:#1d2c22;font:16px Arial,sans-serif}
-textarea{min-height:85px;resize:vertical}
+input,textarea,select{width:100%;padding:13px;border-radius:10px;border:1px solid #d6bc87;background:#fff;color:#1d2c22;font:16px Arial,sans-serif}
+textarea{min-height:75px}
 button{width:100%;padding:14px;margin-top:15px;border:0;border-radius:12px;background:linear-gradient(135deg,#ffe3a7,#c79a51);color:#243525;font:bold 15px Arial,sans-serif;cursor:pointer}
-button:disabled{opacity:.6;cursor:wait}
+button:disabled{opacity:.6}
 .secondary{background:transparent;color:var(--gold);border:1px solid var(--gold)}
 #private{display:none}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:20px}
-.stat{border:1px solid #d6bc8760;background:#ffffff0d;border-radius:16px;padding:18px 8px}
+.stat,.panel{border:1px solid #d6bc8760;border-radius:17px;background:#ffffff08}
+.stat{padding:18px 8px}
 .number{display:block;color:var(--gold);font:bold 32px Arial,sans-serif;margin:8px 0}
-.name{font:13px Arial,sans-serif}
-.panel{border:1px solid #d6bc8760;border-radius:17px;padding:19px 15px;margin-top:23px}
-.summary-row{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid #ffffff20;font:14px Arial,sans-serif;text-align:left}
-.summary-row:last-child{border-bottom:0}
+.name,.muted{font:13px/1.6 Arial,sans-serif}
+.muted{color:#ddcfb2}
+.panel{padding:18px 15px;margin-top:23px}
+.summary-row{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid #ffffff20;text-align:left;font:14px Arial,sans-serif}
+.summary-row:last-child{border:0}
 .summary-row strong{color:var(--gold)}
-.family-list{list-style:none;padding:0;margin:16px 0;text-align:left}
-.family-list li{padding:15px 12px;border-bottom:1px solid #ffffff30}
-.family-list strong{color:var(--gold);font:16px Arial,sans-serif}
-.family-list p{font:13px/1.5 Arial,sans-serif;margin:7px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}
-.muted{color:#d8c8a4;font:13px/1.6 Arial,sans-serif}
-#msg,#familyMsg{font:14px/1.5 Arial,sans-serif;min-height:20px;margin-top:13px}
-small{display:block;color:#d8c8a4;margin-top:20px;line-height:1.5}
+.items{list-style:none;padding:0;margin:12px 0;text-align:left}
+.items li{padding:13px 5px;border-bottom:1px solid #ffffff30;overflow-wrap:anywhere}
+.items strong{color:var(--gold)}
+.items p{font:13px/1.5 Arial,sans-serif;white-space:pre-wrap;margin:6px 0}
+.status{font:14px/1.5 Arial,sans-serif;min-height:20px;margin:12px 0}
+small{display:block;color:#d8c8a4;margin-top:22px;line-height:1.5}
 </style>
 </head>
 <body>
@@ -52,9 +53,9 @@ small{display:block;color:#d8c8a4;margin-top:20px;line-height:1.5}
 <section id="login">
 <form id="loginForm">
 <label for="email">E-mail administrativo</label>
-<input id="email" type="email" autocomplete="username" required placeholder="Seu e-mail">
+<input id="email" type="email" required autocomplete="username">
 <label for="password">Senha</label>
-<input id="password" type="password" autocomplete="current-password" required placeholder="Sua senha">
+<input id="password" type="password" required autocomplete="current-password">
 <button id="enter" type="submit">Entrar no painel 🔐</button>
 </form>
 </section>
@@ -64,10 +65,10 @@ small{display:block;color:#d8c8a4;margin-top:20px;line-height:1.5}
 <p>Bem-vinda à Central de Convidados!</p>
 
 <div class="grid">
-<div class="stat">👨‍👩‍👧<span id="adultos" class="number">—</span><span class="name">Adultos</span></div>
-<div class="stat">🌿<span id="adolescentes" class="number">—</span><span class="name">Adolescentes</span></div>
-<div class="stat">🦁<span id="criancas" class="number">—</span><span class="name">Crianças</span></div>
-<div class="stat">🍼<span id="bebes" class="number">—</span><span class="name">Bebês</span></div>
+<div class="stat">👨‍👩‍👧<span class="number" id="adultos">—</span><span class="name">Adultos</span></div>
+<div class="stat">🌿<span class="number" id="adolescentes">—</span><span class="name">Adolescentes</span></div>
+<div class="stat">🦁<span class="number" id="criancas">—</span><span class="name">Crianças</span></div>
+<div class="stat">🍼<span class="number" id="bebes">—</span><span class="name">Bebês</span></div>
 </div>
 
 <div class="panel">
@@ -75,37 +76,67 @@ small{display:block;color:#d8c8a4;margin-top:20px;line-height:1.5}
 <div class="summary-row"><span>📋 Solicitações pendentes</span><strong id="solicitacoes">—</strong></div>
 <div class="summary-row"><span>🚨 Alertas privados</span><strong id="alertas">—</strong></div>
 </div>
-
 <button id="refresh" type="button" class="secondary">🔄 Atualizar números</button>
 
 <div class="panel">
 <h2>🌿 Cadastro de famílias</h2>
-<p class="muted">Organize os grupos de convidados. Cadastrar uma família não autoriza automaticamente sua entrada.</p>
-
+<p class="muted">Organize seus grupos. O cadastro não autoriza entrada na festa.</p>
 <form id="familyForm">
 <label for="familyName">Nome da família ou grupo</label>
-<input id="familyName" type="text" maxlength="120" required placeholder="Ex.: Família da Priscila">
-
-<label for="familyNotes">Observações privadas (opcional)</label>
-<textarea id="familyNotes" maxlength="1000" placeholder="Anotações que somente a administração poderá consultar"></textarea>
-
+<input id="familyName" maxlength="120" required placeholder="Ex.: Família da Priscila">
+<label for="familyNotes">Observações privadas</label>
+<textarea id="familyNotes" maxlength="1000" placeholder="Opcional"></textarea>
 <button id="saveFamily" type="submit">➕ Cadastrar família</button>
 </form>
-<div id="familyMsg" role="status" aria-live="polite"></div>
+<div class="status" id="familyMsg" role="status"></div>
 </div>
 
 <div class="panel">
 <h2>📋 Famílias cadastradas</h2>
-<p class="muted">Lista privada, carregada diretamente do Supabase.</p>
 <button id="refreshFamilies" type="button" class="secondary">🔄 Atualizar famílias</button>
-<ul id="familyList" class="family-list"></ul>
-<p id="emptyFamilies" class="muted">Carregando famílias...</p>
+<ul id="familyList" class="items"></ul>
+<p id="emptyFamilies" class="muted"></p>
+</div>
+
+<div class="panel">
+<h2>🦁 Integrantes da família</h2>
+<p class="muted">Cadastre pessoas previstas. Isso não confirma presença nem concede autorização de entrada.</p>
+
+<label for="selectedFamily">Selecione a família</label>
+<select id="selectedFamily">
+<option value="">Escolha uma família</option>
+</select>
+
+<form id="personForm">
+<label for="personName">Nome e sobrenome</label>
+<input id="personName" maxlength="160" required placeholder="Nome completo">
+
+<label for="personCategory">Categoria</label>
+<select id="personCategory" required>
+<option value="">Selecione a categoria</option>
+<option value="adulto">Adulto</option>
+<option value="adolescente">Adolescente</option>
+<option value="crianca">Criança</option>
+<option value="bebe">Bebê</option>
+</select>
+
+<label for="personNotes">Observações privadas</label>
+<textarea id="personNotes" maxlength="1000" placeholder="Opcional"></textarea>
+
+<button id="savePerson" type="submit">➕ Adicionar integrante</button>
+</form>
+<div class="status" id="personMsg" role="status"></div>
+
+<h2>📜 Pessoas cadastradas</h2>
+<button id="refreshPeople" type="button" class="secondary">🔄 Atualizar integrantes</button>
+<ul id="peopleList" class="items"></ul>
+<p id="emptyPeople" class="muted">Selecione uma família para visualizar.</p>
 </div>
 
 <button id="logout" type="button" class="secondary">Sair da conta</button>
 </section>
 
-<div id="msg" role="status" aria-live="polite"></div>
+<div id="msg" class="status" role="status" aria-live="polite"></div>
 <small>Área administrativa privada • Safári do Ravi Noah<br>18 de abril de 2027</small>
 </main>
 
@@ -118,9 +149,9 @@ const supabase=createClient(
 );
 
 const $=id=>document.getElementById(id);
-const msg=text=>$('msg').textContent=text;
-let busy=false;
+const msg=t=>$('msg').textContent=t;
 let admin=false;
+let busy=false;
 
 function showAdmin(ok){
 admin=ok;
@@ -128,9 +159,16 @@ $('login').style.display=ok?'none':'block';
 $('private').style.display=ok?'block':'none';
 }
 
-function clearNumbers(){
+function resetPrivate(){
 ['adultos','adolescentes','criancas','bebes','total','solicitacoes','alertas']
 .forEach(id=>$(id).textContent='—');
+$('familyList').replaceChildren();
+$('peopleList').replaceChildren();
+$('selectedFamily').replaceChildren(new Option('Escolha uma família',''));
+$('emptyFamilies').textContent='';
+$('emptyPeople').textContent='Selecione uma família para visualizar.';
+$('familyMsg').textContent='';
+$('personMsg').textContent='';
 }
 
 async function loadSummary(){
@@ -140,17 +178,21 @@ try{
 const {data,error}=await supabase.rpc('admin_resumo_ravi');
 if(error)throw error;
 const r=Array.isArray(data)?data[0]:data;
-if(!r)throw new Error('Resumo vazio');
-$('adultos').textContent=r.adultos??0;
-$('adolescentes').textContent=r.adolescentes??0;
-$('criancas').textContent=r.criancas??0;
-$('bebes').textContent=r.bebes??0;
-$('total').textContent=r.total_confirmados??0;
-$('solicitacoes').textContent=r.solicitacoes_pendentes??0;
-$('alertas').textContent=r.alertas_pendentes??0;
+if(!r)throw Error('Resumo vazio');
+const values={
+adultos:r.adultos,
+adolescentes:r.adolescentes,
+criancas:r.criancas,
+bebes:r.bebes,
+total:r.total_confirmados,
+solicitacoes:r.solicitacoes_pendentes,
+alertas:r.alertas_pendentes
+};
+for(const [id,value] of Object.entries(values)){
+$(id).textContent=value??0;
+}
 }catch(e){
 console.error(e);
-clearNumbers();
 msg('Não foi possível carregar os contadores.');
 }finally{
 $('refresh').disabled=false;
@@ -160,33 +202,89 @@ $('refresh').disabled=false;
 async function loadFamilies(){
 if(!admin)return;
 $('refreshFamilies').disabled=true;
-$('emptyFamilies').textContent='Carregando famílias...';
-$('emptyFamilies').hidden=false;
-$('familyList').replaceChildren();
 try{
 const {data,error}=await supabase.rpc('admin_listar_familias_ravi');
 if(error)throw error;
 const families=Array.isArray(data)?data:[];
-$('emptyFamilies').hidden=families.length>0;
-if(!families.length)$('emptyFamilies').textContent='Nenhuma família cadastrada ainda.';
-for(const family of families){
+const previous=$('selectedFamily').value;
+
+$('familyList').replaceChildren();
+$('selectedFamily').replaceChildren(new Option('Escolha uma família',''));
+
+for(const f of families){
 const li=document.createElement('li');
-const name=document.createElement('strong');
-name.textContent=family.nome;
-li.appendChild(name);
-if(family.observacoes){
-const notes=document.createElement('p');
-notes.textContent=family.observacoes;
-li.appendChild(notes);
+const strong=document.createElement('strong');
+strong.textContent=f.nome;
+li.appendChild(strong);
+if(f.observacoes){
+const p=document.createElement('p');
+p.textContent=f.observacoes;
+li.appendChild(p);
 }
 $('familyList').appendChild(li);
+$('selectedFamily').add(new Option(f.nome,String(f.id)));
+}
+$('emptyFamilies').textContent=families.length?'':'Nenhuma família cadastrada ainda.';
+
+if([...$('selectedFamily').options].some(o=>o.value===previous)){
+$('selectedFamily').value=previous;
+}else{
+$('selectedFamily').value='';
+$('peopleList').replaceChildren();
+$('emptyPeople').textContent='Selecione uma família para visualizar.';
 }
 }catch(e){
 console.error(e);
-$('emptyFamilies').hidden=false;
-$('emptyFamilies').textContent='Não foi possível carregar as famílias.';
+$('emptyFamilies').textContent='Erro ao consultar famílias.';
 }finally{
 $('refreshFamilies').disabled=false;
+}
+}
+
+async function loadPeople(){
+if(!admin)return;
+const familyId=Number($('selectedFamily').value);
+$('peopleList').replaceChildren();
+
+if(!familyId){
+$('emptyPeople').textContent='Selecione uma família para visualizar.';
+return;
+}
+$('refreshPeople').disabled=true;
+$('emptyPeople').textContent='Carregando integrantes...';
+try{
+const {data,error}=await supabase.rpc('admin_listar_pessoas_ravi',{
+p_familia_id:familyId
+});
+if(error)throw error;
+const people=Array.isArray(data)?data:[];
+const labels={
+adulto:'Adulto',
+adolescente:'Adolescente',
+crianca:'Criança',
+bebe:'Bebê',
+indefinida:'Categoria indefinida'
+};
+for(const person of people){
+const li=document.createElement('li');
+const name=document.createElement('strong');
+name.textContent=person.nome_completo||'Sem nome';
+const category=document.createElement('p');
+category.textContent='Categoria: '+(labels[person.categoria]||'Não informada');
+li.append(name,category);
+if(person.observacoes_privadas){
+const note=document.createElement('p');
+note.textContent='Observação: '+person.observacoes_privadas;
+li.appendChild(note);
+}
+$('peopleList').appendChild(li);
+}
+$('emptyPeople').textContent=people.length?'':'Nenhum integrante cadastrado nesta família.';
+}catch(e){
+console.error(e);
+$('emptyPeople').textContent='Erro ao consultar integrantes.';
+}finally{
+$('refreshPeople').disabled=false;
 }
 }
 
@@ -200,7 +298,7 @@ const {data,error}=await supabase.rpc('verificar_admin_ravi');
 if(error||data!==true){
 await supabase.auth.signOut();
 showAdmin(false);
-msg('Esta conta não possui acesso administrativo.');
+msg('Conta sem autorização administrativa.');
 return;
 }
 showAdmin(true);
@@ -226,7 +324,7 @@ return;
 await check();
 }catch(e){
 console.error(e);
-msg('Falha de conexão. Tente novamente.');
+msg('Falha de conexão.');
 }finally{
 busy=false;
 $('enter').disabled=false;
@@ -237,50 +335,75 @@ $('password').value='';
 $('familyForm').addEventListener('submit',async e=>{
 e.preventDefault();
 if(!admin)return;
-const name=$('familyName').value.trim();
-const notes=$('familyNotes').value.trim();
-if(name.length<2||name.length>120){
-$('familyMsg').textContent='Informe um nome entre 2 e 120 caracteres.';
-return;
-}
 $('saveFamily').disabled=true;
-$('familyMsg').textContent='Salvando família...';
+$('familyMsg').textContent='Salvando...';
 try{
 const {error}=await supabase.rpc('admin_cadastrar_familia_ravi',{
-p_nome:name,
-p_observacoes:notes||null
+p_nome:$('familyName').value.trim(),
+p_observacoes:$('familyNotes').value.trim()||null
 });
 if(error)throw error;
 $('familyForm').reset();
-$('familyMsg').textContent='Família cadastrada com sucesso! 💚';
+$('familyMsg').textContent='Família cadastrada! 💚';
 await loadFamilies();
 }catch(e){
 console.error(e);
-$('familyMsg').textContent=
-e.code==='23505'
-?'Essa família já está cadastrada.'
-:'Não foi possível cadastrar. Confira os dados ou as permissões.';
+$('familyMsg').textContent=e.code==='23505'
+?'Essa família já existe.':'Não foi possível cadastrar a família.';
 }finally{
 $('saveFamily').disabled=false;
 }
 });
 
+$('personForm').addEventListener('submit',async e=>{
+e.preventDefault();
+if(!admin)return;
+const familyId=Number($('selectedFamily').value);
+if(!familyId){
+$('personMsg').textContent='Selecione uma família primeiro.';
+return;
+}
+$('savePerson').disabled=true;
+$('personMsg').textContent='Salvando integrante...';
+try{
+const {error}=await supabase.rpc('admin_cadastrar_pessoa_ravi',{
+p_familia_id:familyId,
+p_nome_completo:$('personName').value.trim(),
+p_categoria:$('personCategory').value,
+p_observacoes:$('personNotes').value.trim()||null
+});
+if(error)throw error;
+$('personForm').reset();
+$('personMsg').textContent='Integrante cadastrado com sucesso! 💚';
+await loadPeople();
+}catch(e){
+console.error(e);
+$('personMsg').textContent='Não foi possível cadastrar. Confira o nome, a categoria e a família.';
+}finally{
+$('savePerson').disabled=false;
+}
+});
+
+$('selectedFamily').addEventListener('change',()=>{
+$('personMsg').textContent='';
+loadPeople();
+});
+
 $('refresh').addEventListener('click',loadSummary);
 $('refreshFamilies').addEventListener('click',loadFamilies);
+$('refreshPeople').addEventListener('click',loadPeople);
 
 $('logout').addEventListener('click',async()=>{
 await supabase.auth.signOut();
 showAdmin(false);
-clearNumbers();
-$('familyList').replaceChildren();
+resetPrivate();
 msg('Você saiu da sua conta.');
 });
 
 supabase.auth.onAuthStateChange(event=>{
 if(event==='SIGNED_OUT'){
 showAdmin(false);
-clearNumbers();
-$('familyList').replaceChildren();
+resetPrivate();
 }
 });
 
