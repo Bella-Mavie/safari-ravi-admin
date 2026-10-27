@@ -164,7 +164,19 @@ button:disabled{opacity:.6}
   font:13px/1.6 Arial,sans-serif;
   color:#e9d9b5;
 }
-small{
+ .request-card{margin:14px 0;padding:16px;border:1px solid #d6bc8770;border-radius:15px;background:#0b261c;text-align:left}
+ .request-card h3{color:var(--gold);margin:0 0 8px;font-size:19px}
+ .guest-card{padding:13px 0;border-top:1px solid #ffffff35;font:14px/1.6 Arial,sans-serif}
+ .guest-card strong{color:#ffe1a0}
+ .guest-card p{margin:5px 0;overflow-wrap:anywhere}
+ .guest-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+ .guest-actions button{margin-top:8px;padding:12px 5px}
+ .guest-actions .deny{background:#f1d0c5;color:#5d2424}
+ .guest-actions .approved{background:#bce6c6;color:#16412c}
+ .private-alert{margin:8px 0;padding:9px;border-left:3px solid #e8b866;background:#583c1d;color:#fff1d1;overflow-wrap:anywhere}
+ .request-filter{display:flex;align-items:center;gap:8px;text-align:left;font:14px Arial,sans-serif;margin:15px 0}
+ .request-filter input{width:auto}
+ small{
   display:block;
   color:#d8c8a4;
   margin-top:22px;
@@ -255,6 +267,15 @@ small{
 <button id="refresh" type="button" class="secondary">
   🔄 Atualizar números
 </button>
+
+<div class="panel" id="confirmationPanel">
+  <h2>📋 Gerenciar confirmações</h2>
+  <p class="muted">Confira cada pessoa e decida individualmente. Somente os autorizados entram na lista oficial da festa.</p>
+  <button id="refreshRequests" type="button" class="secondary">🔄 Atualizar confirmações</button>
+  <label class="request-filter"><input type="checkbox" id="showCompleted"> Mostrar também solicitações concluídas</label>
+  <div id="requestMsg" class="status" role="status" aria-live="polite"></div>
+  <div id="requestList"></div>
+</div>
 
 <div class="panel">
   <h2>🌿 Cadastro de famílias</h2>
@@ -482,6 +503,7 @@ const msg=t=>$('msg').textContent=t;
 let admin=false;
 let busy=false;
 let currentInviteCode='';
+let requestsCache=[];
 
 function showAdmin(ok){
   admin=ok;
@@ -521,6 +543,9 @@ function resetPrivate(){
   $('personMsg').textContent='';
 
   clearInvite();
+  requestsCache=[];
+  $('requestList').replaceChildren();
+  $('requestMsg').textContent='';
 }
 
 async function loadSummary(){
@@ -557,6 +582,94 @@ async function loadSummary(){
     msg('Não foi possível carregar os contadores.');
   }finally{
     $('refresh').disabled=false;
+  }
+}
+
+const categoryNames={adulto:'Adulto',adolescente:'Adolescente',crianca:'Criança',bebe:'Bebê',indefinida:'Não definida'};
+const decisionNames={pendente:'⏳ Aguardando decisão',autorizado:'✅ Autorizado',recusado:'❌ Recusado'};
+
+function addText(parent,tag,content,cls){
+  const node=document.createElement(tag);
+  node.textContent=content;
+  if(cls)node.className=cls;
+  parent.appendChild(node);
+  return node;
+}
+
+function renderRequests(){
+  const list=$('requestList');
+  list.replaceChildren();
+  if(!admin)return;
+  const showCompleted=$('showCompleted').checked;
+  const requests=requestsCache.filter(r=>showCompleted || (r.participantes||[]).some(p=>p.decisao==='pendente'));
+  if(!requests.length){
+    $('requestMsg').textContent=showCompleted?'Nenhuma solicitação encontrada.':'Nenhuma solicitação aguardando decisão. 💚';
+    return;
+  }
+  $('requestMsg').textContent=requests.length+' solicitação(ões) exibida(s).';
+  for(const r of requests){
+    const card=addText(list,'article','', 'request-card');
+    addText(card,'h3','🌿 '+(r.familia||'Família não identificada'));
+    addText(card,'p','Responsável: '+(r.responsavel||'Não informado'),'muted');
+    addText(card,'p','Situação: '+(r.status||'Não informada')+' • '+(r.data?new Date(r.data).toLocaleString('pt-BR'):'Data indisponível'),'muted');
+    for(const person of r.participantes||[]){
+      const guest=addText(card,'div','', 'guest-card');
+      addText(guest,'strong',person.nome||'Nome não informado');
+      addText(guest,'p','Declarado: '+(categoryNames[person.categoria_declarada]||person.categoria_declarada||'Não informado')+' • Cadastro: '+(categoryNames[person.categoria_interna]||'Não localizado'));
+      addText(guest,'p',decisionNames[person.decisao]||person.decisao||'Situação não informada');
+      for(const alert of person.alertas||[]){
+        if(alert.resolvido)continue;
+        addText(guest,'div','🚨 Alerta privado: '+(alert.tipo||'Verificar')+(alert.detalhes?' — '+alert.detalhes:''),'private-alert');
+      }
+      const actions=addText(guest,'div','', 'guest-actions');
+      const yes=addText(actions,'button','✅ Autorizar','approved');
+      yes.type='button';
+      const no=addText(actions,'button','❌ Recusar','deny');
+      no.type='button';
+      yes.disabled=person.decisao==='autorizado';
+      no.disabled=person.decisao==='recusado';
+      yes.addEventListener('click',()=>decideParticipant(person,'autorizado',yes,no));
+      no.addEventListener('click',()=>decideParticipant(person,'recusado',yes,no));
+    }
+  }
+}
+
+async function loadRequests(){
+  if(!admin)return;
+  $('refreshRequests').disabled=true;
+  $('requestMsg').textContent='Carregando confirmações...';
+  try{
+    const {data,error}=await supabase.rpc('admin_listar_solicitacoes_ravi');
+    if(error)throw error;
+    requestsCache=Array.isArray(data)?data:[];
+    renderRequests();
+  }catch(e){
+    console.error(e);
+    $('requestMsg').textContent='Não foi possível consultar as confirmações. Verifique se a função SQL foi criada corretamente.';
+  }finally{
+    $('refreshRequests').disabled=false;
+  }
+}
+
+async function decideParticipant(person,decision,yes,no){
+  if(!admin)return;
+  const verb=decision==='autorizado'?'AUTORIZAR':'RECUSAR';
+  if(!window.confirm(verb+' a participação de '+person.nome+'?'))return;
+  yes.disabled=true;
+  no.disabled=true;
+  $('requestMsg').textContent='Salvando sua decisão...';
+  try{
+    const {error}=await supabase.rpc('admin_decidir_participante_ravi',{
+      p_participante_id:person.id,
+      p_decisao:decision
+    });
+    if(error)throw error;
+    await Promise.all([loadRequests(),loadSummary()]);
+  }catch(e){
+    console.error(e);
+    $('requestMsg').textContent='Não foi possível salvar a decisão. Tente novamente.';
+    yes.disabled=person.decisao==='autorizado';
+    no.disabled=person.decisao==='recusado';
   }
 }
 
@@ -751,7 +864,8 @@ async function check(){
 
   await Promise.all([
     loadSummary(),
-    loadFamilies()
+    loadFamilies(),
+    loadRequests()
   ]);
 }
 
@@ -1023,6 +1137,9 @@ $('inviteFamily').addEventListener(
 );
 
 // ATUALIZAR DADOS
+
+$('refreshRequests').addEventListener('click',loadRequests);
+$('showCompleted').addEventListener('change',renderRequests);
 
 $('refresh').addEventListener(
   'click',
