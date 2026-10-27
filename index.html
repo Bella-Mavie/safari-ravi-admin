@@ -73,6 +73,14 @@ button{
   cursor:pointer;
 }
 button:disabled{opacity:.6}
+.danger-action{
+  background:transparent;
+  border:1px solid #e6a6a6;
+  color:#ffd3d3;
+  font-size:13px;
+  margin-top:10px;
+  padding:10px 12px;
+}
 .secondary{
   background:transparent;
   color:var(--gold);
@@ -707,12 +715,20 @@ async function loadFamilies(){
       strong.textContent=f.nome;
       li.appendChild(strong);
 
+      const removeFamily=document.createElement('button');
+      removeFamily.type='button';
+      removeFamily.className='danger-action';
+      removeFamily.textContent='🗑️ Excluir família';
+      removeFamily.setAttribute('aria-label','Excluir família '+f.nome);
+      removeFamily.addEventListener('click',()=>deleteFamily(f,removeFamily));
+
       if(f.observacoes){
         const p=document.createElement('p');
         p.textContent=f.observacoes;
         li.appendChild(p);
       }
 
+      li.appendChild(removeFamily);
       $('familyList').appendChild(li);
 
       $('selectedFamily').add(
@@ -756,6 +772,49 @@ async function loadFamilies(){
   }finally{
     $('refreshFamilies').disabled=false;
   }
+}
+
+async function deleteFamily(f,button){
+  if(!admin)return;
+  const yes=window.confirm(
+    'Excluir a família "'+f.nome+'"?\n\n'+
+    'A exclusão só será permitida se não houver integrantes ou convites vinculados. Esta ação não pode ser desfeita.'
+  );
+  if(!yes)return;
+  button.disabled=true;
+  try{
+    const {error}=await supabase.rpc('admin_excluir_familia_ravi',{
+      p_familia_id:f.id
+    });
+    if(error)throw error;
+    $('emptyFamilies').textContent='Família excluída com sucesso. 💚';
+    await loadFamilies();
+  }catch(e){
+    console.error(e);
+    window.alert('Não foi possível excluir a família. '+(e.message||'Verifique os vínculos existentes.'));
+  }finally{button.disabled=false;}
+}
+
+async function deletePerson(person,button){
+  if(!admin)return;
+  const familyId=Number($('selectedFamily').value);
+  const yes=window.confirm(
+    'Excluir o integrante "'+person.nome_completo+'"?\n\n'+
+    'Só será possível se não houver confirmação ou convite vinculado. Esta ação não pode ser desfeita.'
+  );
+  if(!yes)return;
+  button.disabled=true;
+  try{
+    const {error}=await supabase.rpc('admin_excluir_pessoa_ravi',{
+      p_pessoa_id:person.id
+    });
+    if(error)throw error;
+    $('personMsg').textContent='Integrante excluído com sucesso. 💚';
+    if(Number($('selectedFamily').value)===familyId)await loadPeople();
+  }catch(e){
+    console.error(e);
+    window.alert('Não foi possível excluir o integrante. '+(e.message||'Verifique os vínculos existentes.'));
+  }finally{button.disabled=false;}
 }
 
 async function loadPeople(){
@@ -820,6 +879,13 @@ async function loadPeople(){
         li.appendChild(note);
       }
 
+      const removePerson=document.createElement('button');
+      removePerson.type='button';
+      removePerson.className='danger-action';
+      removePerson.textContent='🗑️ Excluir integrante';
+      removePerson.setAttribute('aria-label','Excluir integrante '+person.nome_completo);
+      removePerson.addEventListener('click',()=>deletePerson(person,removePerson));
+      li.appendChild(removePerson);
       $('peopleList').appendChild(li);
     }
 
