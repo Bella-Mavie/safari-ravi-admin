@@ -971,13 +971,15 @@ $('generateInvite').addEventListener(
         $('inviteMsg').textContent=
           'Esta família já possui um convite ativo. '+
           'Não foi criado outro código.';
-      }else{
+      
+}else{
   $('inviteMsg').textContent=
     'Erro ao gerar convite: '+
     (e.message||'Erro desconhecido')+
     (e.code?' | Código: '+e.code:'');
 }
-    }finally{
+}finally{
+
       $('generateInvite').disabled=false;
     }
   }
