@@ -794,20 +794,34 @@ async function deleteFamily(f,button){
   if(!admin)return;
   const yes=window.confirm(
     'Excluir a família "'+f.nome+'"?\n\n'+
-    'A exclusão só será permitida se não houver integrantes ou convites vinculados. Esta ação não pode ser desfeita.'
+    'Por segurança, famílias com integrantes, convites ou confirmações vinculados não podem ser excluídas diretamente. Esta ação não pode ser desfeita.'
   );
   if(!yes)return;
   button.disabled=true;
+  $('familyMsg').textContent='Verificando e solicitando exclusão de "'+f.nome+'"...';
   try{
-    const {error}=await supabase.rpc('admin_excluir_familia_ravi',{
+    const {data,error}=await supabase.rpc('admin_excluir_familia_ravi',{
       p_familia_id:f.id
     });
     if(error)throw error;
-    $('emptyFamilies').textContent='Família excluída com sucesso. 💚';
+    // Algumas funções SQL retornam false ou um objeto de status em vez de lançar erro.
+    if(data===false || (data && typeof data==='object' && !Array.isArray(data) && (data.sucesso===false || data.success===false))){
+      throw Error(data?.mensagem||data?.message||'O servidor não autorizou a exclusão.');
+    }
     await loadFamilies();
+    // Não confundir uma RPC concluída com uma exclusão efetiva.
+    const {data:remaining,error:checkError}=await supabase.rpc('admin_listar_familias_ravi');
+    if(checkError)throw checkError;
+    if(Array.isArray(remaining) && remaining.some(item=>String(item.id)===String(f.id))){
+      throw Error('A família continua no banco de dados. Verifique os vínculos existentes e a função SQL admin_excluir_familia_ravi.');
+    }
+    $('familyMsg').textContent='Família "'+f.nome+'" excluída com sucesso. 💚';
+    await loadSummary();
   }catch(e){
-    console.error(e);
-    window.alert('Não foi possível excluir a família. '+(e.message||'Verifique os vínculos existentes.'));
+    console.error('Erro ao excluir família:',e);
+    const detail=(e.message||'Erro desconhecido')+(e.code?' (código '+e.code+')':'');
+    $('familyMsg').textContent='Não foi possível excluir "'+f.nome+'": '+detail;
+    window.alert('Não foi possível excluir a família "'+f.nome+'".\n\n'+detail);
   }finally{button.disabled=false;}
 }
 
