@@ -465,10 +465,11 @@ button:disabled{opacity:.6}
       o link definitivo do convite.
     </p>
 
-    <code id="inviteCode"></code>
+    <code id="inviteCode" hidden></code>
+    <code id="inviteLink"></code>
 
     <button id="copyInvite" type="button">
-      📋 Copiar código exclusivo
+      🔗 Copiar link da família
     </button>
 
     <p class="warning">
@@ -478,6 +479,14 @@ button:disabled{opacity:.6}
       Não compartilhe o código antes de
       concluirmos o sistema de confirmação.
     </p>
+  </div>
+  <div class="code-box" style="display:block">
+    <strong>🔗 Já tem um código gerado?</strong>
+    <p class="muted">Cole aqui o código que você guardou para criar o link sem gerar outro convite.</p>
+    <label for="existingInviteCode">Código exclusivo já existente</label>
+    <input id="existingInviteCode" type="text" autocomplete="off" placeholder="Cole o código da família">
+    <button id="copyExistingLink" type="button">📋 Copiar link com este código</button>
+    <p id="existingLinkMsg" class="status" role="status"></p>
   </div>
 </div>
 
@@ -520,6 +529,8 @@ const msg=t=>$('msg').textContent=t;
 let admin=false;
 let busy=false;
 let currentInviteCode='';
+const INVITE_BASE_URL='https://bella-mavie.github.io/convite-safari-ravi./';
+const buildInviteLink=code=>INVITE_BASE_URL+'?convite='+encodeURIComponent(code.trim());
 let requestsCache=[];
 
 function showAdmin(ok){
@@ -531,6 +542,7 @@ function showAdmin(ok){
 function clearInvite(){
   currentInviteCode='';
   $('inviteCode').textContent='';
+  $('inviteLink').textContent='';
   $('inviteResult').style.display='none';
   $('inviteMsg').textContent='';
 }
@@ -1143,6 +1155,7 @@ $('generateInvite').addEventListener(
 
       $('inviteCode').textContent=
         currentInviteCode;
+      $('inviteLink').textContent=buildInviteLink(currentInviteCode);
 
       $('inviteResult').style.display='block';
 
@@ -1188,17 +1201,29 @@ $('copyInvite').addEventListener(
       );
 
       $('inviteMsg').textContent=
-        'Código copiado com sucesso! 💚';
+        'Link exclusivo copiado com sucesso! 💚';
 
     }catch(e){
       console.error(e);
 
       $('inviteMsg').textContent=
         'Não foi possível copiar automaticamente. '+
-        'Toque e segure no código para copiá-lo.';
+        'Toque e segure no link para copiá-lo.';
     }
   }
 );
+
+$('copyExistingLink').addEventListener('click',async()=>{
+  const code=$('existingInviteCode').value.trim();
+  if(!code){$('existingLinkMsg').textContent='Cole o código já gerado para esta família.';return;}
+  const link=buildInviteLink(code);
+  try{
+    await navigator.clipboard.writeText(link);
+    $('existingLinkMsg').textContent='💚 Link copiado! Envie somente à família correspondente.';
+  }catch(e){
+    $('existingLinkMsg').textContent='Copie este link: '+link;
+  }
+});
 
 // ALTERAR FAMÍLIA SELECIONADA
 
