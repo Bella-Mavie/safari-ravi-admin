@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="pt-BR">
 <head>
@@ -187,6 +188,7 @@ small{
     <label for="email">E-mail administrativo</label>
     <input
       id="email"
+      name="email"
       type="email"
       required
       autocomplete="username"
@@ -195,6 +197,7 @@ small{
     <label for="password">Senha</label>
     <input
       id="password"
+      name="password"
       type="password"
       required
       autocomplete="current-password"
@@ -253,8 +256,6 @@ small{
   🔄 Atualizar números
 </button>
 
-<!-- CADASTRO DE FAMÍLIAS -->
-
 <div class="panel">
   <h2>🌿 Cadastro de famílias</h2>
   <p class="muted">
@@ -290,8 +291,6 @@ small{
   <div class="status" id="familyMsg" role="status"></div>
 </div>
 
-<!-- FAMÍLIAS CADASTRADAS -->
-
 <div class="panel">
   <h2>📋 Famílias cadastradas</h2>
 
@@ -306,8 +305,6 @@ small{
   <ul id="familyList" class="items"></ul>
   <p id="emptyFamilies" class="muted"></p>
 </div>
-
-<!-- INTEGRANTES -->
 
 <div class="panel">
   <h2>🦁 Integrantes da família</h2>
@@ -386,8 +383,6 @@ small{
     Selecione uma família para visualizar.
   </p>
 </div>
-
-<!-- NOVA ÁREA: CONVITES EXCLUSIVOS -->
 
 <div class="panel">
   <div style="font-size:32px">🔗🦁✉️</div>
@@ -474,9 +469,7 @@ small{
 </main>
 
 <script type="module">
-
-import {createClient}
-from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+import {createClient} from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
 const supabase=createClient(
   'https://mynigxatpzownmjduowa.supabase.co',
@@ -505,13 +498,8 @@ function clearInvite(){
 
 function resetPrivate(){
   [
-    'adultos',
-    'adolescentes',
-    'criancas',
-    'bebes',
-    'total',
-    'solicitacoes',
-    'alertas'
+    'adultos','adolescentes','criancas','bebes',
+    'total','solicitacoes','alertas'
   ].forEach(id=>$(id).textContent='—');
 
   $('familyList').replaceChildren();
@@ -548,7 +536,6 @@ async function loadSummary(){
     if(error)throw error;
 
     const r=Array.isArray(data)?data[0]:data;
-
     if(!r)throw Error('Resumo vazio');
 
     const values={
@@ -910,7 +897,7 @@ $('personForm').addEventListener(
   }
 );
 
-// NOVA FUNÇÃO: GERAR CONVITE EXCLUSIVO
+// GERAR CONVITE EXCLUSIVO
 
 $('generateInvite').addEventListener(
   'click',
@@ -927,8 +914,6 @@ $('generateInvite').addEventListener(
       return;
     }
 
-    // Evita gerar outro convite sem guardar
-    // o código que acabou de ser criado.
     if(currentInviteCode){
       $('inviteMsg').textContent=
         'Copie e guarde o código exibido antes '+
@@ -977,12 +962,18 @@ $('generateInvite').addEventListener(
 
     }catch(e){
       console.error(e);
+
       if(
         (e.message||'').includes(
           'já possui um convite ativo'
-           )
-        
-+
+        )
+      ){
+        $('inviteMsg').textContent=
+          'Esta família já possui um convite ativo. '+
+          'Não foi criado outro código.';
+      }else{
+        $('inviteMsg').textContent=
+          'Não foi possível gerar o convite. '+
           'Tente novamente.';
       }
     }finally{
@@ -991,7 +982,7 @@ $('generateInvite').addEventListener(
   }
 );
 
-// COPIAR CÓDIGO DO CONVITE
+// COPIAR CÓDIGO
 
 $('copyInvite').addEventListener(
   'click',
@@ -1068,15 +1059,7 @@ check().catch(e=>{
   showAdmin(false);
   msg('Não foi possível iniciar o painel.');
 });
-
 </script>
+  
 </body>
 </html>
-
-      ){
-        $('inviteMsg').textContent=
-          'Esta família já possui um convite ativo. '+
-          'Não foi criado outro código.';
-      }else{
-        $('inviteMsg').textContent=
-          'Não foi possível gerar o convite. '
