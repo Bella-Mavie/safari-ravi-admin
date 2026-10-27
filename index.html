@@ -980,7 +980,99 @@ $('generateInvite').addEventListener(
       if(
         (e.message||'').includes(
           'já possui um convite ativo'
-        )
+           )
+        
++
+          'Tente novamente.';
+      }
+    }finally{
+      $('generateInvite').disabled=false;
+    }
+  }
+);
+
+// COPIAR CÓDIGO DO CONVITE
+
+$('copyInvite').addEventListener(
+  'click',
+  async()=>{
+    if(!currentInviteCode)return;
+
+    try{
+      await navigator.clipboard.writeText(
+        currentInviteCode
+      );
+
+      $('inviteMsg').textContent=
+        'Código copiado com sucesso! 💚';
+
+    }catch(e){
+      console.error(e);
+
+      $('inviteMsg').textContent=
+        'Não foi possível copiar automaticamente. '+
+        'Toque e segure no código para copiá-lo.';
+    }
+  }
+);
+
+// ALTERAR FAMÍLIA SELECIONADA
+
+$('selectedFamily').addEventListener(
+  'change',
+  loadPeople
+);
+
+$('inviteFamily').addEventListener(
+  'change',
+  clearInvite
+);
+
+// ATUALIZAR DADOS
+
+$('refresh').addEventListener(
+  'click',
+  loadSummary
+);
+
+$('refreshFamilies').addEventListener(
+  'click',
+  loadFamilies
+);
+
+$('refreshPeople').addEventListener(
+  'click',
+  loadPeople
+);
+
+// SAIR DA CONTA
+
+$('logout').addEventListener(
+  'click',
+  async()=>{
+    await supabase.auth.signOut();
+
+    showAdmin(false);
+    resetPrivate();
+
+    $('loginForm').reset();
+
+    msg('Você saiu da Central com segurança.');
+  }
+);
+
+// INICIAR PAINEL
+
+check().catch(e=>{
+  console.error(e);
+  showAdmin(false);
+  msg('Não foi possível iniciar o painel.');
+});
+
+</script>
+</body>
+</html>
+
       ){
         $('inviteMsg').textContent=
           'Esta família já possui um convite ativo. '+
