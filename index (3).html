@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#102d21"><title>Central de Convidados | Safári do Ravi Noah</title>
+<style>
+:root{color-scheme:dark;--bg:#102d21;--gold:#e9c37d;--cream:#f8ebcf}*{box-sizing:border-box}body{margin:0;min-height:100svh;background:radial-gradient(circle at 50% 0,#315d42,var(--bg) 65%);color:var(--cream);font-family:Georgia,serif;display:grid;place-items:center;padding:22px}main{width:100%;max-width:440px;border:1px solid #bfa26a;border-radius:22px;background:linear-gradient(150deg,#214b35,#112e23);box-shadow:0 16px 50px #0007;padding:30px 24px;text-align:center}h1{font-size:30px;color:var(--gold);margin:10px 0}p{line-height:1.6}.subtitle{font-size:13px;letter-spacing:2px;color:var(--gold)}form{text-align:left;margin-top:24px}label{display:block;margin:14px 0 7px;font:14px Arial,sans-serif}input{width:100%;padding:14px;border-radius:10px;border:1px solid #d6bc87;background:#fff;color:#1d2c22;font-size:16px}button{width:100%;padding:14px;margin-top:18px;border:0;border-radius:12px;background:linear-gradient(135deg,#ffe3a7,#c79a51);color:#243525;font:bold 16px Arial,sans-serif;cursor:pointer}button:disabled{opacity:.6;cursor:wait}.secondary{background:transparent;color:var(--gold);border:1px solid var(--gold)}#msg{font:14px/1.5 Arial,sans-serif;min-height:24px;margin-top:16px}#private{display:none}small{display:block;color:#d8c8a4;margin-top:18px;line-height:1.5}strong{color:#f4d599}
+</style>
+</head>
+<body><main>
+<div style="font-size:38px">🦁🌿👑</div><div class="subtitle">ACESSO EXCLUSIVO</div><h1>Central do Safári</h1><p>Administração de convidados do<br><strong>Príncipe Ravi Noah</strong></p>
+<section id="login"><form id="loginForm"><label for="email">E-mail administrativo</label><input id="email" type="email" autocomplete="username" required placeholder="Seu e-mail"><label for="password">Senha</label><input id="password" type="password" autocomplete="current-password" required placeholder="Sua senha"><button id="enter" type="submit">Entrar no painel 🔐</button></form></section>
+<section id="private"><p>💚 <strong>Acesso administrativo verificado!</strong></p><p>Seu login está funcionando. As listas e as aprovações serão adicionadas após os próximos testes de segurança.</p><button id="logout" class="secondary">Sair da conta</button></section>
+<div id="msg" role="status" aria-live="polite"></div><small>Área privada • Safári do Ravi Noah<br>18 de abril de 2027</small>
+</main>
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+const supabase=createClient('https://mynigxatpzownmjduowa.supabase.co','sb_publishable_HrVQAx9MFId56dATTeIteQ_bTM9F4Lk');
+const $=id=>document.getElementById(id), msg=t=>$('msg').textContent=t;
+let busy=false;
+function showAdmin(ok){$('login').style.display=ok?'none':'block';$('private').style.display=ok?'block':'none';}
+async function check(){const {data:{session},error:sessionError}=await supabase.auth.getSession();if(sessionError||!session){showAdmin(false);return}const {data,error}=await supabase.rpc('verificar_admin_ravi');if(error||data!==true){await supabase.auth.signOut();showAdmin(false);msg('Esta conta não possui acesso administrativo.');return}showAdmin(true);msg('');}
+$('loginForm').addEventListener('submit',async e=>{e.preventDefault();if(busy)return;busy=true;$('enter').disabled=true;msg('Verificando acesso…');try{const {error}=await supabase.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});if(error){msg('Não foi possível entrar. Confira e-mail, senha e confirmação do e-mail.');return}await check()}catch(e){msg('Falha de conexão. Tente novamente.')}finally{busy=false;$('enter').disabled=false;$('password').value=''}});
+$('logout').addEventListener('click',async()=>{await supabase.auth.signOut();showAdmin(false);msg('Você saiu da sua conta.')});
+supabase.auth.onAuthStateChange((event)=>{if(event==='SIGNED_OUT')showAdmin(false)});
+check().catch(()=>msg('Não foi possível verificar a sessão. Atualize a página.'));
+</script></body></html>
